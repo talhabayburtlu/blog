@@ -1,5 +1,4 @@
 import { makeStyles } from "@material-ui/core";
-import shadows from "@material-ui/core/styles/shadows";
 
 const HeaderStyles = makeStyles({
     appbar: {
