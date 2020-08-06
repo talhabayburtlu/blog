@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core";
 
 const HakkımdaStyles = makeStyles({
     paragraphGrid: {
-        padding: "0px 30px"
+        padding: "0px 30px",
     },
     paragraph: {
         fontFamily: "proxima-nova",
