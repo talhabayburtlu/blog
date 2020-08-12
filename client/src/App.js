@@ -8,6 +8,7 @@ import Blog from "./containers/Blog/Blog";
 import CV from "./containers/Cv/Cv";
 import Hakkımda from "./containers/Hakkımda/Hakkımda";
 import Hesaplarım from "./containers/Hesaplarım/Hesaplarım";
+import Post from "./containers/Blog/Post";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Switch>
             <Route exact path="/hakkimda" component={Hakkımda} />
             <Route exact path="/cv" component={CV} />
+            <Route path="/blog/post/:tabID" component={Post} />
             <Route path="/blog" component={Blog} />
             <Route exact path="/hesaplarim" component={Hesaplarım} />
             <Redirect from="*" to="/hakkimda" />

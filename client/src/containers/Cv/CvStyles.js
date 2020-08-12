@@ -5,7 +5,6 @@ const CvStyles = makeStyles({
         backgroundColor: "#7E1014",
     },
     button: {
-        //border: "2px solid #7E1014",
         borderRadius: "0px",
         minWidth: "120px",
         height: "100%",
@@ -16,7 +15,6 @@ const CvStyles = makeStyles({
     cvbody: {
         padding: "50px 0px 100px 0px",
         backgroundColor: "#335C67",
-        //overflow: "scroll"
     },
     document: {
         height: "800px",

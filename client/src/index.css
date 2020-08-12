@@ -4,8 +4,8 @@
 }
 
 @font-face {
-    font-family: 'proximo-nova';
-    src: local('proximo-nova'), url(./public/fonts/ProximaNova-Regular.otf) format('opentype');
+    font-family: 'proxima-nova';
+    src: local('proxima-nova'), url(./public/fonts/ProximaNova-Regular.otf) format('opentype');
 }
 
 @font-face {
