@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'adobe-garamond-pro';
+    src: local('adobe-garamond-pro'), url(./public/fonts/AGaramondPro-Regular.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'proximo-nova';
+    src: local('proximo-nova'), url(./public/fonts/ProximaNova-Regular.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'din-condensed-web';
+    src: local('din-condensed-web'), url(./public/fonts/DIN\ Condensed\ Web.ttf) format('truetype');
+}
