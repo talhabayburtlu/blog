@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require("path")
 //const cors = require("cors");
 require('./db/mongoose')
 const postRouter = require("../src/routers/post")
@@ -11,8 +12,11 @@ const corsOptions = {
     origin: 'localhost:3000'
 }
 
+const staticFiles = express.static(path.join(__dirname, '../../client/build'))
+app.use(staticFiles)
+
 app.use(express.json())
-//app.use(cors(corsOptions));
+
 app.use((req,res,next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -20,5 +24,6 @@ app.use((req,res,next) => {
     next();
 })
 app.use(postRouter)
+app.use('/*', staticFiles)
 
 module.exports = app
