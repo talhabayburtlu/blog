@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/talhabayburtlu/webpage/issues"
   },
-  "homepage": "https://github.com/talhabayburtlu/webpage#readme",
+  "homepage": "https://still-hamlet-09495.herokuapp.com",
   "dependencies": {
     "concurrently": "^5.3.0"
   }
