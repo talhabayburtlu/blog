@@ -14,7 +14,7 @@ const Post = (props) => {
         const parsedData = JSON.parse(data);
         parsedData.breadcrumbs = [BlogItems[props.match.params.tabID]]
 
-        axios({method: "post" , url: "http://localhost:9000/posts" , data: parsedData})
+        axios({method: "post" , url: "/posts" , data: parsedData})
         .then((response) => {
             console.log(response)
         })

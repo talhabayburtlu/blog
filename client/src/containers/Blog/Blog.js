@@ -19,7 +19,7 @@ class Blog extends Component {
         const currentPage = itemID !== this.state.currentItemID ? 1 : this.state.currentPage;
         const specified = itemID !== 0 ? "/"+ BlogItems[itemID]: "";
 
-        await axios({method: "get" , url: "http://localhost:9000/posts" + specified + "/" + (currentPage - 1) })
+        await axios({method: "get" , url: "/posts" + specified + "/" + (currentPage - 1) })
         .then((response) => {
             console.log(response)
             this.setState({currentItemID: itemID, posts: response.data.posts , total: response.data.total, currentPage, shouldRenderPosts: true})
