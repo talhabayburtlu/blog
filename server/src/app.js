@@ -12,11 +12,10 @@ const corsOptions = {
     origin: 'localhost:3000'
 }
 
-const staticFiles = express.static(path.join(__dirname, '../../client/build'))
-app.use(staticFiles)
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.use(express.json())
-
 app.use((req,res,next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -24,6 +23,9 @@ app.use((req,res,next) => {
     next();
 })
 app.use(postRouter)
-app.use('/*', staticFiles)
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'../client/build/index.html'));
+});
 
 module.exports = app

@@ -41,5 +41,6 @@
     ]
   },
   "devDependencies": {},
-  "homepage": "https://talhabayburtlu.github.io/webpage/"
+  "homepage": "https://talhabayburtlu.github.io/webpage/",
+  "proxy": "http://localhost:9000"
 }
