@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Grid, Avatar, Divider } from "@material-ui/core";
+import { Typography, Grid, Avatar } from "@material-ui/core";
 
 import HakkımdaStyles from "./HakkımdaStyles"
 import avatarImg from "../../public/images/avatar.jpg"

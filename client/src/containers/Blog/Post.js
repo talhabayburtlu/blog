@@ -1,8 +1,8 @@
-import React , {Component, useState} from "react";
+import React from "react";
 import {withRouter} from "react-router-dom"
 import { Grid,  Breadcrumbs, Link, Typography} from "@material-ui/core";
 import MUIRichTextEditor from 'mui-rte'
-
+import axios from "axios";
 
 import BlogItems  from "./BlogItems"
 import PostStyles from "./PostStyles"
@@ -11,7 +11,16 @@ const Post = (props) => {
     const PostClasses = PostStyles();
 
     const onSaveHandler = (data) => {
-        console.log(JSON.parse(data))
+        const parsedData = JSON.parse(data);
+        parsedData.breadcrumbs = [BlogItems[props.match.params.tabID]]
+
+        axios({method: "post" , url: "http://localhost:9000/posts" , data: parsedData})
+        .then((response) => {
+            console.log(response)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
 
     return (
@@ -25,7 +34,7 @@ const Post = (props) => {
                         </Breadcrumbs>
                     </Grid>
                     <Grid item xs={12} style={{ borderRadius: "5px" , minHeight: "475px"}}>
-                        <MUIRichTextEditor label="Buraya paylaşımı yazınız." toolbar inlineToolbar className={PostClasses.textEditor} onSave={onSaveHandler}/>
+                        <MUIRichTextEditor label="Buraya paylaşımı yazınız." toolbar inlineToolbar className={PostClasses.textEditor} onSave={(data) => onSaveHandler(data)}/>
                     </Grid>
                 </Grid>
             </Grid>               

@@ -1,20 +1,14 @@
 const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true,
-        trim: true,
-        uppercase: true
-    },
-    body: {
-        type: String,
+    blocks: {
+        type: Array,
         required: true,
     },
-    mediaLinks: [{
-        type: String,
-        trim: true,   
-    }],
+    entityMap: {
+        type: Array,
+        required: true,
+    },
     breadcrumbs: [{
         type: String,
         trim: true,

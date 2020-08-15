@@ -23,7 +23,6 @@ const HesaplarımStyles = makeStyles({
     },
     iconButton: {
         backgroundColor: "#FFF9D6",
-        borderRadius: "5px",
         width: "80%",
         borderRadius: "15px",
         "&:hover": {

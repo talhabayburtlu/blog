@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Typography, Card, IconButton, CardContent, Icon, SvgIcon } from "@material-ui/core"
+import { Grid, Typography, Card, IconButton, CardContent, SvgIcon } from "@material-ui/core"
 import Icons from "./icons";
 
 import HesaplarımStyles from "./HesaplarımStyles"

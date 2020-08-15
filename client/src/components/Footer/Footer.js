@@ -1,5 +1,5 @@
 import React from "react"
-import { Typography, AppBar, Grid, Button, IconButton } from "@material-ui/core"
+import { Typography, Grid, IconButton } from "@material-ui/core"
 import {LinkedIn,Twitter,Mail, Instagram, GitHub} from "@material-ui/icons"
 
 import FooterStyles from "./FooterStyles"
