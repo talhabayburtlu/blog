@@ -44,6 +44,4 @@ router.get("/posts/:tabName/:page" , async(req,res) => {
     }
 })
 
-
-
 module.exports = router;

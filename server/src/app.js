@@ -3,6 +3,7 @@ const path = require("path")
 //const cors = require("cors");
 require('./db/mongoose')
 const postRouter = require("../src/routers/post")
+const adminRouter = require("../src/routers/admin")
 
 const app = express()
 
@@ -22,7 +23,9 @@ app.use((req,res,next) => {
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     next();
 })
+
 app.use(postRouter)
+app.use(adminRouter)
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname+'/../../client/build/index.html'));

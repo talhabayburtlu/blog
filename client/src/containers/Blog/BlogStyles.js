@@ -40,6 +40,12 @@ const BlogStyles = withStyles({
         "&:hover": {
             backgroundColor: "#7E1014"
         }
+    },
+    popover: {
+        backgroundColor: "#FFF9D6",
+        padding: "30px",
+        width: "250px",
+        height: "250px"   
     }
 });
 
