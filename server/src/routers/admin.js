@@ -4,7 +4,7 @@ const auth = require("../auth/auth")
 
 const router = new express.Router();
 
-router.post("/blog/admin" , async(req,res) => {
+router.post("/blog/admin" , auth ,async(req,res) => {
     const admin = new Admin(req.body)
 
     try {
@@ -28,12 +28,15 @@ router.post("/blog/admin/login" , async(req,res) => {
 router.post("/blog/admin/logout" , auth ,async(req,res) => {
     try {
         req.admin.token = null
-        console.log(req.admin)
         await req.admin.save()
         res.send()
     } catch (e) {
         res.status(500).send()
     }
 })
+
+/*router.get("/blog/admin/auth" , auth , (req,res) => {
+    res.send()
+})*/
 
 module.exports = router;

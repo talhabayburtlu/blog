@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {withRouter} from "react-router-dom"
+import React from "react";
+import {Redirect} from "react-router-dom"
 import { Grid,  Breadcrumbs, Link, Typography} from "@material-ui/core";
 import MUIRichTextEditor from 'mui-rte'
 import axios from "axios";
@@ -23,8 +23,10 @@ const Post = (props) => {
         })
     }
 
+
     return (
         <React.Fragment>
+            {props.location.token === undefined ?  <Redirect to="/blog"></Redirect> : null}
             <Grid container className={PostClasses.grid}>
                 <Grid container item className={PostClasses.gridContainerItem}>
                     <Grid item xs={12} style={{marginTop: "25px"}}>
@@ -42,4 +44,4 @@ const Post = (props) => {
     )
 }
 
-export default withRouter(Post);
+export default Post;

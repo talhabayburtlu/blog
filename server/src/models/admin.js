@@ -26,7 +26,6 @@ const adminSchema = new mongoose.Schema({
 
 adminSchema.statics.findAdmin = async function (username,password) {
     const admin = await Admin.findOne({username})
-    console.log(username)
 
     if (!admin) {
         throw new Error("Admin Kullanıcı Adı Veya Şifre Uyuşmuyor.")

@@ -1,10 +1,12 @@
 import React , {Component} from "react";
+import { Link, Redirect, withRouter } from "react-router-dom";
 import {Grid, AppBar,  Button, ButtonGroup, Typography, Card, CardHeader, CardContent, Popover, TextField} from "@material-ui/core";
 import Pagination from '@material-ui/lab/Pagination';
 import axios from "axios";
 
 import BlogStyles from "./BlogStyles"
 import BlogItems  from "./BlogItems"
+
 
 class Blog extends Component {
     state = {
@@ -50,10 +52,9 @@ class Blog extends Component {
         const username = this.state.usernameInput;
         const password = this.state.passwordInput;
 
-        await (await axios({method: "post" , url: "/blog/admin/login" , data: {username,password}}))
+        await axios({method: "post" , url: "/blog/admin/login" , data: {username,password}})
         .then((response) => {
-            console.log(response)
-            this.setState({token: response.token})
+            this.setState({token: response.data.token})
         })
         .catch((e) => {
             console.log(e)
@@ -64,11 +65,50 @@ class Blog extends Component {
         this.onItemChangeHandler(0);
     }
 
+    adminLoginPopover(classes) {
+        const open = Boolean(this.state.anchorEl);
+        const id = open ? 'simple-popover' : undefined
+
+        return (
+            <React.Fragment>
+                <Button className={classes.button}  aria-describedby={id} size="large" 
+                        variant="text" onClick={this.onPopoverButtonClickHandler} style={{margin:"0px"}}> Admin Girisi </Button>
+                <Popover id={id} open={open} anchorEl={this.state.anchorEl} onClose={this.onPopoverCloseHandler } 
+                    anchorOrigin={{vertical: 'bottom',horizontal: 'right'}}
+                    transformOrigin={{vertical: 'top',horizontal: 'right'}}>
+                    <Grid container className={classes.popover} alignItems="center">
+                        <Grid item xs={12} align="center">
+                            <Typography className={classes.cardTitle} variant="h6"> Lütfen Giriş Yapınız</Typography>
+                        </Grid>
+                        <Grid item xs={12} align="center">
+                            <form noValidate autoComplete="off">
+                                <Grid item xs={12}>
+                                    <TextField id="standard-required"
+                                            label="Admin Kullanıcı Adı"
+                                            value={this.state.usernameInput} 
+                                            onInput={(e) => this.setState({usernameInput: e.target.value})} />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField type="password" 
+                                            label="Admin Kullanıcı Şifresi" 
+                                            value={this.state.passwordInput}
+                                            onInput={(e) => this.setState({passwordInput: e.target.value})} />
+                                </Grid>
+                            </form>
+                        </Grid>
+                        <Grid item xs={12} align="center">
+                            <Button className={classes.button} onClick={this.onLoginClickHandler} style={{marginTop: "25px"}}>Giris Yap</Button>
+                        </Grid>
+                    </Grid>
+                </Popover>
+            </React.Fragment>
+        )
+    }
+
     render() {
         const {classes} = this.props;
 
-        const open = Boolean(this.state.anchorEl);
-        const id = open ? 'simple-popover' : undefined
+        
 
         return (
             <React.Fragment>
@@ -81,38 +121,11 @@ class Blog extends Component {
                                 </ButtonGroup>
                             </Grid>
                             <Grid item align="right" xs={8}>
-                                {this.state.currentItemID !== 0 ? 
-                                    <Button className={classes.button} size="large" variant="text" href={"/blog/post/" + this.state.currentItemID}>
-                                        {BlogItems[this.state.currentItemID]} Yeni Paylaşım</Button> : null }
-                                    <Button aria-describedby={id} className={classes.button} size="large" variant="text" onClick={this.onPopoverButtonClickHandler}>Admin Girisi</Button>
-                                    <Popover id={id} open={open} anchorEl={this.state.anchorEl} onClose={this.onPopoverCloseHandler } 
-                                        anchorOrigin={{vertical: 'bottom',horizontal: 'center'}}
-                                        transformOrigin={{vertical: 'top',horizontal: 'center'}}>
-                                        <Grid container className={classes.popover} alignItems="center">
-                                            <Grid item xs={12} align="center">
-                                                <Typography className={classes.cardTitle} variant="h6"> Lütfen Giriş Yapınız</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} align="center">
-                                                <form noValidate autoComplete="off">
-                                                    <Grid item xs={12}>
-                                                        <TextField id="standard-required"
-                                                                label="Admin Kullanıcı Adı"
-                                                                value={this.state.usernameInput} 
-                                                                onInput={(e) => this.setState({usernameInput: e.target.value})} />
-                                                    </Grid>
-                                                    <Grid item xs={12}>
-                                                        <TextField type="password" 
-                                                                label="Admin Kullanıcı Şifresi" 
-                                                                value={this.state.passwordInput}
-                                                                onInput={(e) => this.setState({passwordInput: e.target.value})} />
-                                                    </Grid>
-                                                </form>
-                                            </Grid>
-                                            <Grid item xs={12} align="center">
-                                                <Button className={classes.button} onClick={this.onLoginClickHandler} style={{marginTop: "25px"}}>Giris Yap</Button>
-                                            </Grid>
-                                        </Grid>
-                                    </Popover>
+                                {this.state.currentItemID !== 0 && this.state.token ?
+                                    <Link className={classes.link} to={{pathname: "/blog/post/" + this.state.currentItemID, token: this.state.token}}>
+                                        <Button className={classes.button} size="large" variant="text">{BlogItems[this.state.currentItemID]} Yeni Paylaşım</Button> 
+                                    </Link>: null }
+                                {this.adminLoginPopover(classes)}
                             </Grid>
                         </Grid>
                     </AppBar>
@@ -150,4 +163,4 @@ class Blog extends Component {
     }
 }
 
-export default BlogStyles(Blog);
+export default withRouter(BlogStyles(Blog));

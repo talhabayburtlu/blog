@@ -16,6 +16,9 @@ const BlogStyles = withStyles({
         backgroundColor: "#7E1014",
         color: "#FFF9D6"
     },
+    link: {
+        textDecoration: "none"
+    },
     card: {
         margin: "25px 0px",
         border: "1px solid #335C67",
@@ -40,6 +43,13 @@ const BlogStyles = withStyles({
         "&:hover": {
             backgroundColor: "#7E1014"
         }
+    },
+    image:{
+        //margin: "20px 15px",
+        width: "75px",
+        height: "75px",
+        border: "1px solid #335C67", 
+        borderRadius: "10px"
     },
     popover: {
         backgroundColor: "#FFF9D6",
