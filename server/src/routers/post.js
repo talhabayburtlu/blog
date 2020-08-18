@@ -44,4 +44,15 @@ router.get("/posts/:tabName/:page" , async(req,res) => {
     }
 })
 
+router.get("/post/:_id" , async (req,res) => {
+    try {
+        const post = await Post.findById(req.params._id)
+        if (post === null)
+            throw new Error("Paylaşım bulunamadı.")
+        res.status(201).send(post)
+    } catch (e) {
+        res.status(404).send()
+    }
+})
+
 module.exports = router;

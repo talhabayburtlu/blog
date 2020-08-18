@@ -1,5 +1,5 @@
 import React , {Component} from "react";
-import { Link, Redirect, withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import {Grid, AppBar,  Button, ButtonGroup, Typography, Card, CardHeader, CardContent, Popover, TextField} from "@material-ui/core";
 import Pagination from '@material-ui/lab/Pagination';
 import axios from "axios";
@@ -122,7 +122,7 @@ class Blog extends Component {
                             </Grid>
                             <Grid item align="right" xs={8}>
                                 {this.state.currentItemID !== 0 && this.state.token ?
-                                    <Link className={classes.link} to={{pathname: "/blog/post/" + this.state.currentItemID, token: this.state.token}}>
+                                    <Link className={classes.link} to={{pathname: "/blog/post-share/" + this.state.currentItemID, token: this.state.token}}>
                                         <Button className={classes.button} size="large" variant="text">{BlogItems[this.state.currentItemID]} Yeni Paylaşım</Button> 
                                     </Link>: null }
                                 {this.adminLoginPopover(classes)}
@@ -145,7 +145,10 @@ class Blog extends Component {
                                         <Grid container alignItems="center">
                                             <Grid item xs={3}>&hellip;</Grid> 
                                             <Grid item xs={9} align="right">
-                                                <Button className={[classes.button , classes.cardButton].join(" ")} variant="contained" size="large" >DEVAMINI OKU</Button>
+                                                <Button className={[classes.button , classes.cardButton].join(" ")} 
+                                                        variant="contained" 
+                                                        size="large" 
+                                                        href={"/blog/post/" + post._id}>DEVAMINI OKU</Button>
                                             </Grid>
                                         </Grid>
                                     </CardContent>

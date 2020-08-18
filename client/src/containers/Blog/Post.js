@@ -1,47 +1,60 @@
-import React from "react";
-import {Redirect} from "react-router-dom"
-import { Grid,  Breadcrumbs, Link, Typography} from "@material-ui/core";
-import MUIRichTextEditor from 'mui-rte'
+import React , {useState, useEffect} from "react";
+import {Redirect, withRouter} from "react-router-dom"
+import { Grid, Typography, Card, CardHeader , CardContent} from "@material-ui/core";
 import axios from "axios";
 
-import BlogItems  from "./BlogItems"
 import PostStyles from "./PostStyles"
 
 const Post = (props) => {
     const PostClasses = PostStyles();
+    const [post,setPost] = useState(null)
 
-    const onSaveHandler = (data) => {
-        const parsedData = JSON.parse(data);
-        parsedData.breadcrumbs = [BlogItems[props.match.params.tabID]]
+    useEffect(() => {
+        const fetchData = async() => {
+            await axios({method: "GET" , url:"/post/" + props.match.params._id})
+            .then((response) => {
+                console.log(response)
+                setPost(response.data)
+            })
+            .catch((e) => {
+                setPost({error: true})
+                setPost(e)
+            })
+        }
 
-        axios({method: "post" , url: "/posts" , data: parsedData})
-        .then((response) => {
-            console.log(response)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-    }
-
+        fetchData();
+    }, []) 
 
     return (
-        <React.Fragment>
-            {props.location.token === undefined ?  <Redirect to="/blog"></Redirect> : null}
-            <Grid container className={PostClasses.grid}>
-                <Grid container item className={PostClasses.gridContainerItem}>
-                    <Grid item xs={12} style={{marginTop: "25px"}}>
-                        <Breadcrumbs separator=">">
-                            <Link className={PostClasses.breadCrumb} color="primary" href="/blog">Blog</Link>
-                            <Typography className={PostClasses.breadCrumb} color="primary">{BlogItems[props.match.params.tabID]}</Typography>
-                        </Breadcrumbs>
-                    </Grid>
-                    <Grid item xs={12} style={{ borderRadius: "5px" , minHeight: "475px"}}>
-                        <MUIRichTextEditor label="Buraya paylaşımı yazınız." toolbar inlineToolbar className={PostClasses.textEditor} onSave={(data) => onSaveHandler(data)}/>
-                    </Grid>
-                </Grid>
-            </Grid>               
-        </React.Fragment>
+       <React.Fragment>
+           {post === null ? null :
+           post.error ? <Redirect to="/blog" /> :
+           <Grid container className={PostClasses.grid}>
+               <Grid item xs={12}>
+                <Card className={PostClasses.card}>
+                        <CardHeader title={<Typography className={PostClasses.cardTitle} variant="h5">{post.blocks[0].text}</Typography>}
+                                                        subheader={<Typography className={PostClasses.cardSubtitle} variant="body2">{((new Date(post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
+                        <CardContent className={PostClasses.cardContent}>
+                            {post.blocks.slice(1).map((block) => {
+                                if (block.type === "unstyled") {
+                                    return <Typography className={PostClasses.cardBody} variant="body1" paragraph key={block.key}>
+                                        {block.text}
+                                    </Typography>
+                                } else if (block.type === "atomic") {
+                                    const data = post.entityMap[0][block.entityRanges[0].key].data;
+                                    return <Grid item xs={12} align="center" key={block.key}>
+                                        <img height={data.height} width={data.width} alt={data.url} src={data.url}/>
+                                    </Grid>       
+                                }
+                                return null   
+                            })}
+                            
+                        </CardContent>
+                    </Card>
+               </Grid>
+           </Grid> }
+       </React.Fragment> 
     )
 }
 
-export default Post;
+export default withRouter(Post);
