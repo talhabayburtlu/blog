@@ -56,6 +56,21 @@ router.get("/post/:_id" , async (req,res) => {
     }
 })
 
+router.put("/post/:_id" , auth , async(req,res) => {
+    try {
+        const updatedBody = {
+            blocks: req.body.blocks.filter((block) => block.text !== ""),
+            entityMap: req.body.entityMap,
+            breadcrumbs: req.body.breadcrumbs
+        } 
+
+        const post = await Post.updateOne({_id: req.params._id} , updatedBody)
+        res.send(post)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+})
+
 router.delete("/post/:_id", auth , async (req,res) => {
     try {
         console.log(req.params._id)

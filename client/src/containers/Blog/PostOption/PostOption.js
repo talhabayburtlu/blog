@@ -1,4 +1,5 @@
 import React , {Component} from "react";
+import { Link } from "react-router-dom";
 import {Grid, Button, Typography, IconButton, Menu, MenuItem,  Dialog, DialogContent, DialogActions} from "@material-ui/core";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import axios from "axios";
@@ -28,7 +29,7 @@ class PostOption extends Component {
     }
 
     onDeletePostHandler = async () => {
-        await axios({method: "DELETE" , url: "/post/" + this.props._id , headers: {Authorization: "Bearer " + this.props.token}})
+        await axios({method: "DELETE" , url: "/post/" + this.props.post._id , headers: {Authorization: "Bearer " + this.props.token}})
         .then(() => {
             this.props.onItemChangeHandler(this.props.currentItemID)
         })
@@ -41,33 +42,40 @@ class PostOption extends Component {
         const {classes} = this.props;
 
         return (
+            
             <React.Fragment>
                 <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick} style={{margin: "15px"}} > 
                     <MoreVertIcon />
                 </IconButton>
                 <Menu id="simple-menu" anchorEl={this.state.menuAnchorEl} 
                     keepMounted open={Boolean(this.state.menuAnchorEl)} onClose={this.handleClose}
-                    style={{border: "1px solid #335C67"}} 
                     transformOrigin={{vertical: 'top',horizontal: 'right'}} variant="selectedMenu"
-                    style={{marginTop: "-10px"}}>
-                    <MenuItem className={[classes.button, classes.cardButton].join(" ")} >PAYLAŞIMI DÜZENLE</MenuItem>
+                    style={{border: "1px solid #335C67"}}>
+                    <Link className={classes.link} 
+                        to={{pathname: "/blog/post-share/" + this.props.currentItemID, 
+                        token: this.props.token, 
+                        _id: this.props.post._id, 
+                        defaultValue: this.props.post}}>
+                        <MenuItem className={[classes.button, classes.cardButton].join(" ")}>PAYLAŞIMI DÜZENLE</MenuItem>
+                    </Link>
                     <MenuItem className={[classes.button, classes.cardButton].join(" ")} 
                             onClick={() => {this.onDialogOpenHandler(); this.handleClose()}}>PAYLAŞIMI SİL</MenuItem>
                     <Dialog
                             open={this.state.dialogAnchorEl}
                             onClose={this.onDialogCloseHandler}>
                             <DialogContent>
-                                <Typography className={classes.cardTitle} variant="h6">Bu paylaşımı silmek istiyor musunuz?</Typography>
+                                <Typography className={classes.title} variant="h6">Bu paylaşımı silmek istiyor musunuz?</Typography>
                             </DialogContent>
                             <DialogActions>
                                 <Grid item xs={6} align="center">
-                                    <Button className={[classes.button, classes.successButton].join(" ")} variant="contained" onClick={this.onDeletePostDialogCloseHandler}>SILME</Button>
+                                    <Button className={[classes.button, classes.successButton].join(" ")} 
+                                            variant="contained" 
+                                            onClick={this.onDialogCloseHandler}>SILME</Button>
                                 </Grid>
                                 <Grid item xs={6} align="center">
                                     <Button className={[classes.button, classes.failButton].join(" ")} 
                                             variant="contained" 
-                                            onClick={() => {
-                                                this.onDialogCloseHandler(); this.onDeletePostHandler()}}>SIL</Button>
+                                            onClick={() => {this.onDialogCloseHandler(); this.onDeletePostHandler()}}>SIL</Button>
                                 </Grid>
                             </DialogActions>
                         </Dialog>

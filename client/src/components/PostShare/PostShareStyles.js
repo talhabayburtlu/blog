@@ -11,7 +11,8 @@ const PostShareStyles = makeStyles({
     },
     breadCrumb: {
         fontFamily: "adobe-garamond-pro",
-        fontSize: "20px"
+        fontSize: "20px",
+        fontWeight: 600
     }
 });
 

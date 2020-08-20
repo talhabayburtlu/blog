@@ -144,7 +144,7 @@ class Blog extends Component {
                                                         subheader={<Typography className={classes.cardSubtitle} variant="body2">{((new Date(post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
                                         </Grid>
                                         <Grid item xs={3} align="right">
-                                           <PostOption _id={post._id} token={this.state.token} currentItemID={this.state.currentItemID} onItemChangeHandler={this.onItemChangeHandler}/>
+                                           <PostOption post={post} token={this.state.token} currentItemID={this.state.currentItemID} onItemChangeHandler={this.onItemChangeHandler}/>
                                         </Grid>
                                     </Grid>
 

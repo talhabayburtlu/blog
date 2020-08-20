@@ -35,8 +35,8 @@ router.post("/blog/admin/logout" , auth ,async(req,res) => {
     }
 })
 
-/*router.get("/blog/admin/auth" , auth , (req,res) => {
+router.get("/blog/admin/auth" , auth , (req,res) => {
     res.send()
-})*/
+})
 
 module.exports = router;

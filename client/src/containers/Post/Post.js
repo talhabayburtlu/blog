@@ -10,8 +10,10 @@ const Post = (props) => {
     const [post,setPost] = useState(null)
 
     useEffect(() => {
+        const _id = props.match.params._id;
+
         const fetchData = async() => {
-            await axios({method: "GET" , url:"/post/" + props.match.params._id})
+            await axios({method: "GET" , url:"/post/" + _id})
             .then((response) => {
                 console.log(response)
                 setPost(response.data)
