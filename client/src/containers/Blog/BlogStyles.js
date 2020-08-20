@@ -1,6 +1,6 @@
 import {withStyles} from "@material-ui/core/styles"
 
-const BlogStyles = withStyles({
+const BlogStyles = withStyles((theme) => ({
     grid: {
         margin: "100px 0px",
         padding: "0px 85px",
@@ -14,7 +14,7 @@ const BlogStyles = withStyles({
         height: "100%",
         fontFamily: "din-condensed-web",
         backgroundColor: "#7E1014",
-        color: "#FFF9D6"
+        color: "#FFF9D6",
     },
     link: {
         textDecoration: "none"
@@ -56,7 +56,16 @@ const BlogStyles = withStyles({
         padding: "30px",
         width: "250px",
         height: "250px"   
+    },
+    dialog: {
+        backgroundColor: "#FFF3B0"
+    },
+    successButton: {
+        backgroundColor: "#43A047"
+    },
+    failButton: {
+        backgroundColor: "#E53935"
     }
-});
+}));
 
 export default BlogStyles;

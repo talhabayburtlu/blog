@@ -4,7 +4,7 @@ const auth = require("../auth/auth")
 
 const router = new express.Router();
 
-router.post("/blog/admin" , auth ,async(req,res) => {
+router.post("/blog/admin" ,async(req,res) => {
     const admin = new Admin(req.body)
 
     try {

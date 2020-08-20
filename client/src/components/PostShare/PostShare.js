@@ -4,7 +4,7 @@ import { Grid,  Breadcrumbs, Link, Typography} from "@material-ui/core";
 import MUIRichTextEditor from 'mui-rte'
 import axios from "axios";
 
-import BlogItems  from "./BlogItems"
+import BlogItems  from "../../containers/Blog/BlogItems"
 import PostShareStyles from "./PostShareStyles"
 
 const Post = (props) => {

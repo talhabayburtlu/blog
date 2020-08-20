@@ -1,9 +1,10 @@
 const express = require('express');
 const Post = require("../models/post");
+const auth = require("../auth/auth")
 
 const router = new express.Router();
 
-router.post("/posts" , async (req,res) => {
+router.post("/posts" , auth , async (req,res) => {
     const trimmedPost = {
         blocks: req.body.blocks.filter((block) => block.text !== ""),
         entityMap: req.body.entityMap,
@@ -52,6 +53,17 @@ router.get("/post/:_id" , async (req,res) => {
         res.status(201).send(post)
     } catch (e) {
         res.status(404).send()
+    }
+})
+
+router.delete("/post/:_id", auth , async (req,res) => {
+    try {
+        console.log(req.params._id)
+        const post = await Post.findById(req.params._id)
+        await post.remove()
+        res.send()
+    } catch (e) {
+        res.status(500).send()
     }
 })
 

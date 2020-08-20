@@ -1,12 +1,12 @@
 import React , {Component} from "react";
 import { Link, withRouter } from "react-router-dom";
-import {Grid, AppBar,  Button, ButtonGroup, Typography, Card, CardHeader, CardContent, Popover, TextField} from "@material-ui/core";
+import {Grid, AppBar,  Button, ButtonGroup, Typography, Card, CardHeader, CardContent, Popover, TextField, } from "@material-ui/core";
 import Pagination from '@material-ui/lab/Pagination';
 import axios from "axios";
 
 import BlogStyles from "./BlogStyles"
 import BlogItems  from "./BlogItems"
-
+import PostOption from "./PostOption/PostOption"
 
 class Blog extends Component {
     state = {
@@ -15,18 +15,20 @@ class Blog extends Component {
         total: 0,
         currentPage: 1,
         shouldRenderPosts: false,
-        anchorEl: null,
+        deletePostDialog: false,
+        anchorElLogin: null,
+        anchorElOptions: null,
         usernameInput: "",
         passwordInput: "",
         token: null
     }
 
     onPopoverButtonClickHandler = (event) => {
-        this.setState({anchorEl : event.currentTarget});
+        this.setState({anchorElLogin : event.currentTarget});
     }
 
     onPopoverCloseHandler = () => {
-        this.setState({anchorEl : null});
+        this.setState({anchorElLogin : null});
     }
 
     onItemChangeHandler =  async (itemID) => {
@@ -66,14 +68,14 @@ class Blog extends Component {
     }
 
     adminLoginPopover(classes) {
-        const open = Boolean(this.state.anchorEl);
+        const open = Boolean(this.state.anchorElLogin);
         const id = open ? 'simple-popover' : undefined
 
         return (
             <React.Fragment>
                 <Button className={classes.button}  aria-describedby={id} size="large" 
                         variant="text" onClick={this.onPopoverButtonClickHandler} style={{margin:"0px"}}> Admin Girisi </Button>
-                <Popover id={id} open={open} anchorEl={this.state.anchorEl} onClose={this.onPopoverCloseHandler } 
+                <Popover id={id} open={open} anchorEl={this.state.anchorElLogin} onClose={this.onPopoverCloseHandler } 
                     anchorOrigin={{vertical: 'bottom',horizontal: 'right'}}
                     transformOrigin={{vertical: 'top',horizontal: 'right'}}>
                     <Grid container className={classes.popover} alignItems="center">
@@ -108,8 +110,6 @@ class Blog extends Component {
     render() {
         const {classes} = this.props;
 
-        
-
         return (
             <React.Fragment>
                 <Grid container className={classes.grid}>
@@ -138,8 +138,16 @@ class Blog extends Component {
                         {this.state.shouldRenderPosts ? this.state.posts.map((post,index) => 
                             <Grid item xs={12} key={index}>
                                 <Card className={classes.card}>
-                                    <CardHeader title={<Typography className={classes.cardTitle} variant="h5">{post.blocks[0].text}</Typography>}
-                                                                    subheader={<Typography className={classes.cardSubtitle} variant="body2">{((new Date(post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
+                                    <Grid container >
+                                        <Grid item xs={9}>
+                                            <CardHeader title={<Typography className={classes.cardTitle} variant="h5">{post.blocks[0].text}</Typography>}
+                                                        subheader={<Typography className={classes.cardSubtitle} variant="body2">{((new Date(post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
+                                        </Grid>
+                                        <Grid item xs={3} align="right">
+                                           <PostOption _id={post._id} token={this.state.token} currentItemID={this.state.currentItemID} onItemChangeHandler={this.onItemChangeHandler}/>
+                                        </Grid>
+                                    </Grid>
+
                                     <CardContent>
                                         <Typography className={classes.cardBody} variant="body1" paragraph >{post.blocks[1].text}</Typography>
                                         <Grid container alignItems="center">
