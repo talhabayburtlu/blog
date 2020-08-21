@@ -29,9 +29,10 @@ class PostOption extends Component {
     }
 
     onDeletePostHandler = async () => {
+        console.log(this.props)
         await axios({method: "DELETE" , url: "/post/" + this.props.post._id , headers: {Authorization: "Bearer " + this.props.token}})
         .then(() => {
-            this.props.onItemChangeHandler(this.props.currentItemID)
+            this.props.onDeleteHandler(this.props.currentItemID)
         })
         .catch((e) => {
             console.log(e)

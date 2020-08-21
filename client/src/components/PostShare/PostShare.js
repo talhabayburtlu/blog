@@ -3,6 +3,7 @@ import {withRouter} from "react-router-dom"
 import { Grid,  Breadcrumbs, Link, Typography} from "@material-ui/core";
 import MUIRichTextEditor from 'mui-rte'
 import axios from "axios";
+import {convertFromRaw} from "draft-js"
 
 import BlogItems  from "../../containers/Blog/BlogItems"
 import PostShareStyles from "./PostShareStyles"
@@ -11,11 +12,11 @@ const PostShare = (props) => {
     const PostShareClasses = PostShareStyles();
     const defaultValue = !props.location.defaultValue ? null : JSON.stringify({blocks: props.location.defaultValue.blocks , entityMap : props.location.defaultValue.entityMap})
 
+    console.log(JSON.parse(defaultValue))
+
     const onSaveHandler = (data) => {
         const parsedData = JSON.parse(data);
         parsedData.breadcrumbs = [BlogItems[props.match.params.tabID]]
-
-        console.log(props)
 
         if (!defaultValue) {
             axios({method: "POST" , url: "/posts" , data: parsedData, headers: {Authorization: "Bearer " + props.location.token}})
@@ -59,7 +60,6 @@ const PostShare = (props) => {
                         </Breadcrumbs>
                     </Grid>
                     <Grid item xs={4} align="right" style={{marginTop: "25px"}}>
-                        {console.log(props)}
                         <Typography className={PostShareClasses.breadCrumb} color="primary">{defaultValue ? "Paylaşım Düzenleme" : "Yeni Paylaşım" }</Typography>
                     </Grid>
                     <Grid item xs={12} style={{ borderRadius: "5px" , minHeight: "475px"}}>

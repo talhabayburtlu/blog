@@ -4,6 +4,7 @@ import { Grid, Typography, Card, CardHeader , CardContent} from "@material-ui/co
 import axios from "axios";
 
 import PostStyles from "./PostStyles"
+import PostOption from "../Blog/PostOption/PostOption"
 
 const Post = (props) => {
     const PostClasses = PostStyles();
@@ -34,8 +35,17 @@ const Post = (props) => {
            <Grid container className={PostClasses.grid}>
                <Grid item xs={12}>
                 <Card className={PostClasses.card}>
-                        <CardHeader title={<Typography className={PostClasses.cardTitle} variant="h5">{post.blocks[0].text}</Typography>}
-                                                        subheader={<Typography className={PostClasses.cardSubtitle} variant="body2">{((new Date(post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
+                    <Grid container>
+                        <Grid item xs={9}>
+                            <CardHeader title={<Typography className={PostClasses.cardTitle} variant="h5">{post.blocks[0].text}</Typography>}
+                                    subheader={<Typography className={PostClasses.cardSubtitle} variant="body2">{((new Date(post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
+                        </Grid>
+                        {props.location.token !== undefined ? <Grid item xs={3} align="right">
+                            <PostOption post={post} token={props.location.token} currentItemID={props.location.currentItemID} onDeleteHandler={() => props.history.push("/blog")}/>
+                        </Grid> : null}
+                    </Grid>
+                        
+                        
                         <CardContent className={PostClasses.cardContent}>
                             {post.blocks.slice(1).map((block) => {
                                 if (block.type === "unstyled") {

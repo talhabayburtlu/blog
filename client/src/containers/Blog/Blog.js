@@ -143,9 +143,9 @@ class Blog extends Component {
                                             <CardHeader title={<Typography className={classes.cardTitle} variant="h5">{post.blocks[0].text}</Typography>}
                                                         subheader={<Typography className={classes.cardSubtitle} variant="body2">{((new Date(post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
                                         </Grid>
-                                        <Grid item xs={3} align="right">
-                                           <PostOption post={post} token={this.state.token} currentItemID={this.state.currentItemID} onItemChangeHandler={this.onItemChangeHandler}/>
-                                        </Grid>
+                                        {this.state.token !== null ? <Grid item xs={3} align="right">
+                                           <PostOption post={post} token={this.state.token} currentItemID={this.state.currentItemID} onDeleteHandler={this.onItemChangeHandler}/>
+                                        </Grid> : null}
                                     </Grid>
 
                                     <CardContent>
@@ -153,10 +153,12 @@ class Blog extends Component {
                                         <Grid container alignItems="center">
                                             <Grid item xs={3}>&hellip;</Grid> 
                                             <Grid item xs={9} align="right">
-                                                <Button className={[classes.button , classes.cardButton].join(" ")} 
-                                                        variant="contained" 
-                                                        size="large" 
-                                                        href={"/blog/post/" + post._id}>DEVAMINI OKU</Button>
+                                                <Link className={classes.link} to={{pathname: "/blog/post/" + post._id, token: this.state.token, currentItemID: this.state.currentItemID}}>
+                                                    <Button className={[classes.button , classes.cardButton].join(" ")} 
+                                                            variant="contained" 
+                                                            size="large" >DEVAMINI OKU</Button>
+                                                </Link>
+                                                
                                             </Grid>
                                         </Grid>
                                     </CardContent>
