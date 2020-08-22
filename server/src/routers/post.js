@@ -9,10 +9,9 @@ router.post("/posts" , auth , async (req,res) => {
         blocks: req.body.blocks,
         entityMap: req.body.entityMap,
         breadcrumbs: req.body.breadcrumbs
-    } 
+    }
     
     const post = new Post(trimmedPost)
-    
 
     try {
         await post.save()
@@ -73,7 +72,6 @@ router.put("/post/:_id" , auth , async(req,res) => {
 
 router.delete("/post/:_id", auth , async (req,res) => {
     try {
-        console.log(req.params._id)
         const post = await Post.findById(req.params._id)
         await post.remove()
         res.send()

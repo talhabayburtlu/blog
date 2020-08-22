@@ -3,19 +3,23 @@ import {withRouter} from "react-router-dom"
 import { Grid,  Breadcrumbs, Link, Typography} from "@material-ui/core";
 import MUIRichTextEditor from 'mui-rte'
 import axios from "axios";
-import {convertFromRaw} from "draft-js"
+import {convertFromRaw,ContentState} from "draft-js"
 
 import BlogItems  from "../../containers/Blog/BlogItems"
 import PostShareStyles from "./PostShareStyles"
 
 const PostShare = (props) => {
     const PostShareClasses = PostShareStyles();
-    const defaultValue = !props.location.defaultValue ? null : JSON.stringify({blocks: props.location.defaultValue.blocks , entityMap : props.location.defaultValue.entityMap})
-
-    console.log(JSON.parse(defaultValue))
+    const value = !props.location.defaultValue ? null : {blocks: props.location.defaultValue.blocks , entityMap : props.location.defaultValue.entityMap}
+    if (value && value.entityMap === undefined)
+        value.entityMap = {}
+    
+    console.log(value)
+    const defaultValue = !props.location.defaultValue ? null : JSON.stringify(value)
 
     const onSaveHandler = (data) => {
         const parsedData = JSON.parse(data);
+        console.log(parsedData)
         parsedData.breadcrumbs = [BlogItems[props.match.params.tabID]]
 
         if (!defaultValue) {

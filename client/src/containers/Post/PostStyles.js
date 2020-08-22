@@ -1,6 +1,6 @@
-import {makeStyles} from "@material-ui/core"
+import {withStyles} from "@material-ui/core"
 
-const PostStyles = makeStyles({
+const PostStyles = withStyles({
     grid: {
         margin: "100px 0px",
         padding: "0px 85px",

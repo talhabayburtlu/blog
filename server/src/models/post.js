@@ -6,8 +6,7 @@ const PostSchema = new mongoose.Schema({
         required: true,
     },
     entityMap: {
-        type: Array,
-        required: true,
+        type: Object
     },
     breadcrumbs: [{
         type: String,
