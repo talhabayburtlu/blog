@@ -1,5 +1,6 @@
 import React , {Component} from "react";
 import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import {Grid, AppBar,  Button, ButtonGroup, Typography, Card, CardHeader, CardContent, Popover, TextField, } from "@material-ui/core";
 import Pagination from '@material-ui/lab/Pagination';
 import axios from "axios";
@@ -7,6 +8,7 @@ import axios from "axios";
 import BlogStyles from "./BlogStyles"
 import BlogItems  from "./BlogItems"
 import PostOption from "./PostOption/PostOption"
+import * as actions from "../../store/actions/index";
 
 class Blog extends Component {
     state = {
@@ -50,19 +52,6 @@ class Blog extends Component {
         await this.onItemChangeHandler(this.state.currentItemID)
     }
 
-    onLoginClickHandler = async () => {
-        const username = this.state.usernameInput;
-        const password = this.state.passwordInput;
-
-        await axios({method: "post" , url: "/blog/admin/login" , data: {username,password}})
-        .then((response) => {
-            this.setState({token: response.data.token})
-        })
-        .catch((e) => {
-            console.log(e)
-        })   
-    }
-
     componentDidMount() {
         this.onItemChangeHandler(0);
     }
@@ -99,7 +88,9 @@ class Blog extends Component {
                             </form>
                         </Grid>
                         <Grid item xs={12} align="center">
-                            <Button className={classes.button} onClick={this.onLoginClickHandler} style={{marginTop: "25px"}}>Giris Yap</Button>
+                            <Button className={classes.button} 
+                                    onClick={() => this.props.onLogin(this.state.usernameInput, this.state.passwordInput)} 
+                                    style={{marginTop: "25px"}}> Giris Yap </Button>
                         </Grid>
                     </Grid>
                 </Popover>
@@ -121,8 +112,8 @@ class Blog extends Component {
                                 </ButtonGroup>
                             </Grid>
                             <Grid item align="right" xs={8}>
-                                {this.state.currentItemID !== 0 && this.state.token ?
-                                    <Link className={classes.link} to={{pathname: "/blog/post-share/" + this.state.currentItemID, token: this.state.token}}>
+                                {this.state.currentItemID !== 0 && this.props.token ?
+                                    <Link className={classes.link} to={{pathname: "/blog/post-share/" + this.state.currentItemID, token: this.props.token}}>
                                         <Button className={classes.button} size="large" variant="text">{BlogItems[this.state.currentItemID]} Yeni Paylaşım</Button> 
                                     </Link>: null }
                                 {this.adminLoginPopover(classes)}
@@ -143,8 +134,8 @@ class Blog extends Component {
                                             <CardHeader title={<Typography className={classes.cardTitle} variant="h5">{post.blocks[0].text}</Typography>}
                                                         subheader={<Typography className={classes.cardSubtitle} variant="body2">{((new Date(post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
                                         </Grid>
-                                        {this.state.token !== null ? <Grid item xs={3} align="right">
-                                           <PostOption post={post} token={this.state.token} currentItemID={this.state.currentItemID} onDeleteHandler={this.onItemChangeHandler}/>
+                                        {this.props.token !== null ? <Grid item xs={3} align="right">
+                                           <PostOption post={post} token={this.props.token} currentItemID={this.state.currentItemID} onDeleteHandler={this.onItemChangeHandler}/>
                                         </Grid> : null}
                                     </Grid>
 
@@ -153,7 +144,7 @@ class Blog extends Component {
                                         <Grid container alignItems="center">
                                             <Grid item xs={3}>&hellip;</Grid> 
                                             <Grid item xs={9} align="right">
-                                                <Link className={classes.link} to={{pathname: "/blog/post/" + post._id, token: this.state.token, currentItemID: this.state.currentItemID}}>
+                                                <Link className={classes.link} to={{pathname: "/blog/post/" + post._id, token: this.props.token, currentItemID: this.state.currentItemID}}>
                                                     <Button className={[classes.button , classes.cardButton].join(" ")} 
                                                             variant="contained" 
                                                             size="large" >DEVAMINI OKU</Button>
@@ -176,4 +167,16 @@ class Blog extends Component {
     }
 }
 
-export default withRouter(BlogStyles(Blog));
+const mapStateToProps = state => {
+    return {
+        token: state.admin.token
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onLogin: (username,password) => dispatch(actions.login(username,password))
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(BlogStyles(Blog)));
