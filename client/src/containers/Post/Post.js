@@ -1,10 +1,13 @@
 import React , {Component} from "react";
 import {Redirect, withRouter} from "react-router-dom"
+import { connect } from "react-redux";
 import { Grid, Typography, Card, CardHeader , CardContent} from "@material-ui/core";
 import axios from "axios";
 
-import PostStyles from "./PostStyles"
-import PostOption from "../Blog/PostOption/PostOption"
+import PostStyles from "./PostStyles";
+import PostOption from "../Blog/PostOption/PostOption";
+import BlogNavbar from "../../components/Blog/BlogNavbar/BlogNavbar";
+import * as actions from "../../store/actions/index";
 
 class Post extends Component {
     state = {
@@ -37,6 +40,12 @@ class Post extends Component {
             {this.state.post === null ? null :
             this.state.error ? <Redirect to="/blog" /> :
             <Grid container className={classes.grid}>
+                <BlogNavbar
+                    currentItemID={this.props.location.currentItemID} 
+                    token={this.props.token}
+                    onItemChangeHandler={(selectedItemId) => this.props.history.push({pathname: "/blog" , state: {selectedItemId}})} 
+                    onLogin={this.props.onLogin} onLogout={this.props.onLogout} />
+
                 <Grid item xs={12}>
                     <Card className={classes.card}>
                         <Grid container>
@@ -44,8 +53,8 @@ class Post extends Component {
                                 <CardHeader title={<Typography className={classes.cardTitle} variant="h5">{this.state.post.blocks[0].text}</Typography>}
                                         subheader={<Typography className={classes.cardSubtitle} variant="body2">{((new Date(this.state.post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
                             </Grid>
-                            {this.props.location.token !== null ? <Grid item xs={3} align="right">
-                                <PostOption post={this.state.post} token={this.props.location.token} currentItemID={this.props.location.currentItemID} onDeleteHandler={() => this.props.history.push("/blog")}/>
+                            {this.props.token !== null ? <Grid item xs={3} align="right">
+                                <PostOption post={this.state.post} token={this.props.token} currentItemID={this.props.location.currentItemID} onDeleteHandler={() => this.props.history.push("/blog")}/>
                             </Grid> : null}
                         </Grid>
                             
@@ -74,4 +83,17 @@ class Post extends Component {
     }
 }
 
-export default withRouter(PostStyles(Post));
+const mapStateToProps = state => {
+    return {
+        token: state.admin.token
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onLogin: (username,password,closeLoginPopover) => dispatch(actions.login(username,password,closeLoginPopover)),
+        onLogout: () => dispatch(actions.logout())
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(PostStyles(Post)));

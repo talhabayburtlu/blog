@@ -1,6 +1,6 @@
-import {makeStyles} from "@material-ui/core"
+import {withStyles} from "@material-ui/core"
 
-const PostShareStyles = makeStyles({
+const PostShareStyles = withStyles((theme) => ({
     grid: {
         margin: "100px 0px",
         padding: "0px 85px"
@@ -14,6 +14,6 @@ const PostShareStyles = makeStyles({
         fontSize: "20px",
         fontWeight: 600
     }
-});
+}));
 
 export default PostShareStyles;

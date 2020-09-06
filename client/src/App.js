@@ -4,12 +4,13 @@ import { Grid } from '@material-ui/core';
 
 import Blog from "./containers/Blog/Blog";
 import Post from "./containers/Post/Post";
+import PostShare from "./containers/Blog/PostShare/PostShare";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import CV from "./components/Cv/Cv"
 import Hakkımda from "./components/Hakkımda/Hakkımda";
 import Hesaplarım from "./components/Hesaplarım/Hesaplarım";
-import PostShare from "./components/PostShare/PostShare";
+
 
 
 
