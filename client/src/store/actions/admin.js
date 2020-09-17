@@ -28,7 +28,7 @@ export const loginFail = (error) => {
     }
 }
 
-export const login = (username,password,closeLoginPopover) => {
+export const login = (username,password,closeLoginPopover,onSnackbarOpenHandler) => {
     return dispatch => {
         dispatch(loginStart())
 
@@ -36,9 +36,15 @@ export const login = (username,password,closeLoginPopover) => {
         .then((response) => {
             localStorage.setItem("id" , response.data._id)
             localStorage.setItem("token" , response.data.token);
+
+            onSnackbarOpenHandler("Giriş Yaptınız!" , "success");
+
             dispatch(loginSuccess(response.data.token, closeLoginPopover))
         })
         .catch((e) => {
+
+            onSnackbarOpenHandler("Kullanıcı Adı veya Şifre Yanlış!" , "error")
+
             dispatch(loginFail(e))
         })   
     }

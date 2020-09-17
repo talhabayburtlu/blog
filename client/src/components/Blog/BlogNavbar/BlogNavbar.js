@@ -1,23 +1,25 @@
 import React, {useState} from "react";
-import {Grid, AppBar,  Button, ButtonGroup, Popover, Typography, TextField } from "@material-ui/core";
+import { connect } from "react-redux";
+import {Grid, AppBar,  Button, ButtonGroup, Popover, Typography, TextField, Snackbar, SnackbarContent } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 import BlogNavbarStyles from "./BlogNavbarStyles";
 import BlogItems  from "../../../containers/Blog/BlogItems";
+import * as actions from "../../../store/actions/index";
 
 const BlogNavbar = (props) => {
     const BlogNavbarClasses = BlogNavbarStyles();
-    const [anchorElLogin, setAnchorElLogin] = useState(null)
-    const [usernameInput, setUsernameInput] = useState("")
-    const [passwordInput, setPasswordInput] = useState("")
+    const [anchorElLogin, setAnchorElLogin] = useState(null);
+    const [usernameInput, setUsernameInput] = useState("");
+    const [passwordInput, setPasswordInput] = useState("");
     
     const onPopoverButtonClickHandler = (event) => {
-        setAnchorElLogin(event.currentTarget)
-    }
+        setAnchorElLogin(event.currentTarget);
+    };
 
     const onPopoverCloseHandler = () => {
-        setAnchorElLogin(null)
-    }
+        setAnchorElLogin(null);
+    };
 
     const adminLoginPopover = () => {
         const open = Boolean(anchorElLogin);
@@ -52,19 +54,19 @@ const BlogNavbar = (props) => {
                         </Grid>
                         <Grid item xs={12} align="center">
                             <Button className={BlogNavbarClasses.button} 
-                                    onClick={() => props.onLogin(usernameInput, passwordInput, onPopoverCloseHandler)} 
+                                    onClick={() => props.onLogin(usernameInput, passwordInput, onPopoverCloseHandler, props.onSnackbarOpen)}
                                     style={{marginTop: "25px"}}> Giris Yap </Button>
                         </Grid>
                     </Grid>
                 </Popover>
             </React.Fragment>
-        )
+        );
     }
 
     const adminLogoutButton = () => {
         return (
             <Button className={BlogNavbarClasses.button} size="large" 
-                        variant="text" onClick={props.onLogout} style={{margin:"0px"}}> Çıkıs Yap </Button>
+                        variant="text" onClick={() =>  {props.onLogout(); props.onSnackbarOpen("Çıkış Yaptınız!", "success");}} style={{margin:"0px"}}> Çıkıs Yap </Button>
         )
     }
 
@@ -87,10 +89,42 @@ const BlogNavbar = (props) => {
                             <Button className={BlogNavbarClasses.button} size="large" variant="text">{BlogItems[props.currentItemID]} Yeni Paylaşım</Button> 
                         </Link>: null }
                     { props.token === null ? adminLoginPopover() : adminLogoutButton() }
+                    <Snackbar 
+                        open={props.snackbarOpen}
+                        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                        autoHideDuration={3000} 
+                        onClose={props.onSnackbarClose}
+                    >
+                        <SnackbarContent 
+                            className={props.snackbarSeverity === "success" ? BlogNavbarClasses.snackBarSuccess :
+                            props.snackbarSeverity === "error" ? BlogNavbarClasses.snackBarFail : null} 
+                            message={props.snackbarMessage} 
+                            style={{borderRadius: "10px" }}/>
+                    </Snackbar>
+
                 </Grid>
             </Grid>
         </AppBar>
     );
 }
 
-export default BlogNavbar;
+
+const mapStateToProps = state => {
+    return {
+        token: state.admin.token,
+        snackbarOpen : state.snackbar.open,
+        snackbarMessage : state.snackbar.message,
+        snackbarSeverity : state.snackbar.severity
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onLogin: (username,password,closeLoginPopover,onSnackbarOpenHandler) => dispatch(actions.login(username,password,closeLoginPopover,onSnackbarOpenHandler)),
+        onLogout: () => dispatch(actions.logout()),
+        onSnackbarOpen : (message,severity) => dispatch((actions.openSnackbar(message,severity))),
+        onSnackbarClose : () => dispatch(actions.closeSnackbar())
+    };
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(BlogNavbar);

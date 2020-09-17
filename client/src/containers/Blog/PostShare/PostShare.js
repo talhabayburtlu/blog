@@ -22,15 +22,17 @@ class PostShare extends Component {
         if (!this.state.defaultValue) {
             axios({method: "POST" , url: "/posts" , data: parsedData, headers: {Authorization: "Bearer " + this.props.token}})
             .then((response) => {
-            console.log(response)
+            this.props.onSnackbarOpen("Yeni paylaşım yaptınız!" , "success")
+            this.props.history.push("/blog")
             })
             .catch((error) => {
                 console.log(error)
             })
         } else {
-            axios({method: "PUT" , url: "/post/" + this.state.defaultValue._id , data: parsedData, headers: {Authorization: "Bearer " + this.props.token}})
+            axios({method: "PUT" , url: "/post/" + this.props.location.defaultValue._id , data: parsedData, headers: {Authorization: "Bearer " + this.props.token}})
             .then((response) => {
-            console.log(response)
+            this.props.onSnackbarOpen("Paylaşımı düzenlediniz!" , "success")
+            this.props.history.push("/blog")
             })
             .catch((error) => {
                 console.log(error)
@@ -107,7 +109,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onLogin: (username,password,closeLoginPopover) => dispatch(actions.login(username,password,closeLoginPopover)),
-        onLogout: () => dispatch(actions.logout())
+        onLogout: () => dispatch(actions.logout()),
+        onSnackbarOpen : (message,severity) => dispatch((actions.openSnackbar(message,severity))),
     }
 }
 

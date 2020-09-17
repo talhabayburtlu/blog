@@ -1,7 +1,7 @@
 import React , {Component} from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import {Grid , Button , Typography, Card, CardHeader, CardContent} from "@material-ui/core";
+import {Grid , Button , Typography, Card, CardHeader, CardContent, Snackbar, SnackbarContent} from "@material-ui/core";
 import Pagination from '@material-ui/lab/Pagination';
 import axios from "axios";
 
@@ -47,6 +47,22 @@ class Blog extends Component {
         this.onItemChangeHandler(itemId);
     }
 
+    snackbar = (classes) => (
+        <Snackbar 
+        open={this.props.snackbarOpen}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        autoHideDuration={3000} 
+        onClose={this.props.onSnackbarClose}
+    >
+        <SnackbarContent 
+            className={this.props.snackbarSeverity === "success" ? classes.snackBarSuccess :
+            this.props.snackbarSeverity === "error" ? classes.snackBarFail : null} 
+            message={this.props.snackbarMessage} 
+            style={{borderRadius: "10px" }}/>
+    </Snackbar>
+    )
+
+
     render() {
         const {classes} = this.props;
 
@@ -54,9 +70,8 @@ class Blog extends Component {
             <React.Fragment>
                 <Grid container className={classes.grid}>
                     <BlogNavbar currentItemID={this.state.currentItemID} 
-                                token={this.props.token} 
-                                onItemChangeHandler={this.onItemChangeHandler} 
-                                onLogin={this.props.onLogin} onLogout={this.props.onLogout} />
+                                onItemChangeHandler={this.onItemChangeHandler}
+                    />
 
                     <Grid item container xs={12}>
                         <Grid item xs={12} style={{margin: "30px 0px"}}>
@@ -97,7 +112,9 @@ class Blog extends Component {
                     
                     <Grid container justify="center">
                         <Pagination count={Math.ceil(this.state.total / 10)} page={this.state.currentPage} size="large" color="primary" onChange={this.onCurrentPageChangeHandler} />
-                    </Grid>   
+                    </Grid>
+
+                    {this.snackbar(classes)}
                 </Grid>               
             </React.Fragment>
         )
@@ -106,14 +123,19 @@ class Blog extends Component {
 
 const mapStateToProps = state => {
     return {
-        token: state.admin.token
+        token: state.admin.token,
+        snackbarOpen : state.snackbar.open,
+        snackbarMessage : state.snackbar.message,
+        snackbarSeverity : state.snackbar.severity
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         onLogin: (username,password,closeLoginPopover) => dispatch(actions.login(username,password,closeLoginPopover)),
-        onLogout: () => dispatch(actions.logout())
+        onLogout: () => dispatch(actions.logout()),
+        onSnackbarOpen : (message,severity) => dispatch((actions.openSnackbar(message,severity))),
+        onSnackbarClose : () => dispatch(actions.closeSnackbar())
     }
 }
 

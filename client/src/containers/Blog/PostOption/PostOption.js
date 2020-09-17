@@ -1,10 +1,12 @@
 import React , {Component} from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import {Grid, Button, Typography, IconButton, Menu, MenuItem,  Dialog, DialogContent, DialogActions} from "@material-ui/core";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import axios from "axios";
 
 import PostOptionStyles from "./PostOptionStyles"
+import * as actions from "../../../store/actions/index";
 
 class PostOption extends Component {
     state = {
@@ -33,6 +35,7 @@ class PostOption extends Component {
         await axios({method: "DELETE" , url: "/post/" + this.props.post._id , headers: {Authorization: "Bearer " + this.props.token}})
         .then(() => {
             this.props.onDeleteHandler(this.props.currentItemID)
+            this.props.onSnackbarOpen("Paylaşımı Sildiniz!" , "success");
         })
         .catch((e) => {
             console.log(e)
@@ -62,19 +65,20 @@ class PostOption extends Component {
                     <MenuItem className={[classes.button, classes.cardButton].join(" ")} 
                             onClick={() => {this.onDialogOpenHandler(); this.handleClose()}}>PAYLAŞIMI SİL</MenuItem>
                     <Dialog
-                            open={this.state.dialogAnchorEl}
-                            onClose={this.onDialogCloseHandler}>
+                        PaperProps={{style: {border: "1px solid #7E1014", backgroundColor: "#FFF3B0"}}}
+                        open={this.state.dialogAnchorEl}
+                        onClose={this.onDialogCloseHandler}>
                             <DialogContent>
                                 <Typography className={classes.title} variant="h6">Bu paylaşımı silmek istiyor musunuz?</Typography>
                             </DialogContent>
                             <DialogActions>
                                 <Grid item xs={6} align="center">
-                                    <Button className={[classes.button, classes.successButton].join(" ")} 
+                                    <Button className={[classes.button, classes.failButton].join(" ")} 
                                             variant="contained" 
                                             onClick={this.onDialogCloseHandler}>SILME</Button>
                                 </Grid>
                                 <Grid item xs={6} align="center">
-                                    <Button className={[classes.button, classes.failButton].join(" ")} 
+                                    <Button className={[classes.button, classes.successButton].join(" ")} 
                                             variant="contained" 
                                             onClick={() => {this.onDialogCloseHandler(); this.onDeletePostHandler()}}>SIL</Button>
                                 </Grid>
@@ -86,4 +90,11 @@ class PostOption extends Component {
     }
 }
 
-export default PostOptionStyles(PostOption);
+const mapDispatchToProps = dispatch => {
+    return {
+        onSnackbarOpen : (message,severity) => dispatch((actions.openSnackbar(message,severity))),
+        onSnackbarClose : () => dispatch(actions.closeSnackbar())
+    };
+};
+
+export default connect(null,mapDispatchToProps)(PostOptionStyles(PostOption));

@@ -65,6 +65,18 @@ const BlogStyles = withStyles((theme) => ({
     },
     failButton: {
         backgroundColor: "#E53935"
+    },
+    snackBarSuccess: {
+        backgroundColor: "#388050"
+    },
+    snackBarFail: {
+        backgroundColor: "#7E1014"
+    },
+    snackBarInformation: {
+        backgroundColor: "#335C67"
+    },
+    snackBarWarning: {
+        backgroundColor: "#E09F3E"
     }
 }));
 

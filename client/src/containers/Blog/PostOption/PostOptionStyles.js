@@ -12,10 +12,16 @@ const BlogStyles = withStyles((theme) => ({
         }
     },
     successButton: {
-        backgroundColor: "#43A047"
+        backgroundColor: "#20BF6B",
+        "&:hover": {
+            backgroundColor: "#26DE81"
+        }
     },
     failButton: {
-        backgroundColor: "#E53935"
+        backgroundColor: "#7E1014",
+        "&:hover": {
+            backgroundColor: "#A2151A"
+        }
     },
     link: {
         textDecoration: "none"
@@ -26,8 +32,10 @@ const BlogStyles = withStyles((theme) => ({
         color: "#7E1014"
     },
     dialog: {
-        backgroundColor: "#FFF3B0"
-    }
+        backgroundColor: "#FFF3B0",
+        border: "2px solid #7E1014"
+    },
+    
     
 }));
 

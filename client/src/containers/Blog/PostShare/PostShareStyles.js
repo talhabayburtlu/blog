@@ -13,6 +13,18 @@ const PostShareStyles = withStyles((theme) => ({
         fontFamily: "adobe-garamond-pro",
         fontSize: "20px",
         fontWeight: 600
+    },
+    snackBarSuccess: {
+        backgroundColor: "#388050"
+    },
+    snackBarFail: {
+        backgroundColor: "#7E1014"
+    },
+    snackBarInformation: {
+        backgroundColor: "#335C67"
+    },
+    snackBarWarning: {
+        backgroundColor: "#E09F3E"
     }
 }));
 
