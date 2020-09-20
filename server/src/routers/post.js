@@ -25,7 +25,6 @@ router.get("/posts/:page" , async(req,res) => {
     const posts = await Post.find({}).sort([["createdAt", -1]]).skip(10 * req.params.page).limit(10);
     const total = await Post.find({}).count({})
 
-
     try {
         res.status(201).send({posts,total})
     } catch (e) {
@@ -34,8 +33,21 @@ router.get("/posts/:page" , async(req,res) => {
 })
 
 router.get("/posts/:tabName/:page" , async(req,res) => {
-    const posts = await Post.find({breadcrumbs: req.params.tabName}).sort([["createdAt", -1]]).skip(10 * req.params.page).limit(10);
-    const total = await Post.find({breadcrumbs: req.params.tabName}).count({})
+    const posts = await Post.find({breadcrumbs: {$in : [req.params.tabName]}}).sort([["createdAt", -1]]).skip(10 * req.params.page).limit(10);
+    const total = await Post.find({breadcrumbs: {$in : [req.params.tabName]}}).count({})
+
+    console.log("test")
+
+    try {
+        res.status(201).send({posts,total})
+    } catch (e) {
+        res.status(400).send(e)
+    }
+})
+
+router.get("/posts/:tabName/:itemName/:page" , async(req,res) => {
+    const posts = await Post.find({breadcrumbs: [req.params.tabName , req.params.itemName]}).sort([["createdAt", -1]]).skip(10 * req.params.page).limit(10);
+    const total = await Post.find({breadcrumbs: [req.params.tabName , req.params.itemName]}).count({})
 
     try {
         res.status(201).send({posts,total})

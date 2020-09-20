@@ -8,6 +8,10 @@ const BlogStyles = withStyles((theme) => ({
     appbar: {
         color: "#7E1014",
     },
+    title: {
+        fontFamily: "adobe-garamond-pro",
+        fontWeight: "bold",
+    },
     button: {
         borderRadius: "0px",
         margin: "0px 10px",

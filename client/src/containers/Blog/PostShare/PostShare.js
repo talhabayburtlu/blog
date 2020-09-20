@@ -5,7 +5,7 @@ import { Grid,  Breadcrumbs, Link, Typography} from "@material-ui/core";
 import MUIRichTextEditor from 'mui-rte'
 import axios from "axios";
 
-import BlogItems  from "../../../containers/Blog/BlogItems";
+import {BlogItems,IndividualItems} from "../../../containers/Blog/BlogItems";
 import PostShareStyles from "./PostShareStyles"
 import BlogNavbar from "../../../components/Blog/BlogNavbar/BlogNavbar";
 import * as actions from "../../../store/actions/index";
@@ -17,7 +17,10 @@ class PostShare extends Component {
 
     onSaveHandler = (data) => {
         const parsedData = JSON.parse(data);
-        parsedData.breadcrumbs = [BlogItems[this.props.match.params.tabID]]
+        parsedData.breadcrumbs = [
+            BlogItems[this.props.location.currentTabID] , 
+            IndividualItems[this.props.location.currentTabID][this.props.location.currentItemID]  
+        ]
 
         if (!this.state.defaultValue) {
             axios({method: "POST" , url: "/posts" , data: parsedData, headers: {Authorization: "Bearer " + this.props.token}})
@@ -68,19 +71,25 @@ class PostShare extends Component {
     
         return (
             <React.Fragment>
+                {console.log(this.props)}
                 <Grid container className={classes.grid}>
                     <Grid container item style={{marginBottom: "25px"}}>
                         <BlogNavbar
-                            currentItemID={this.props.location.currentItemID} 
+                            currentTabID={this.props.location.currentTabID} 
                             token={this.props.token}
                             onItemChangeHandler={(selectedItemId) => this.props.history.push({pathname: "/blog" , state: {selectedItemId}})} 
-                            onLogin={this.props.onLogin} onLogout={this.props.onLogout} />
+                        />
                     </Grid>
                     <Grid container item className={classes.gridContainerItem}>
                         <Grid item xs={8} style={{marginTop: "25px"}}>
-                            <Breadcrumbs separator=">">
+                            <Breadcrumbs separator="→">
                                 <Link className={classes.breadCrumb} color="primary" href="/blog">Blog</Link>
-                                <Typography className={classes.breadCrumb} color="primary">{BlogItems[this.props.match.params.tabID]}</Typography>
+                                <Typography className={classes.breadCrumb} color="primary">{
+                                    BlogItems[this.props.location.currentTabID]
+                                }</Typography>
+                                <Typography className={classes.breadCrumb} color="primary">{
+                                    IndividualItems[this.props.location.currentTabID][this.props.location.currentItemID]
+                                } </Typography>
                             </Breadcrumbs>
                         </Grid>
                         <Grid item xs={4} align="right" style={{marginTop: "25px"}}>
@@ -108,8 +117,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onLogin: (username,password,closeLoginPopover) => dispatch(actions.login(username,password,closeLoginPopover)),
-        onLogout: () => dispatch(actions.logout()),
         onSnackbarOpen : (message,severity) => dispatch((actions.openSnackbar(message,severity))),
     }
 }

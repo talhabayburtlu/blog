@@ -1,10 +1,11 @@
 import React, {useState} from "react";
 import { connect } from "react-redux";
-import {Grid, AppBar,  Button, ButtonGroup, Popover, Typography, TextField, Snackbar, SnackbarContent } from "@material-ui/core";
+import {Grid, AppBar,  Button, ButtonGroup, Popover, Typography, TextField, Snackbar, SnackbarContent} from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 import BlogNavbarStyles from "./BlogNavbarStyles";
-import BlogItems  from "../../../containers/Blog/BlogItems";
+import Tab from "./Tab";
+import {IndividualItems} from "../../../containers/Blog/BlogItems";
 import * as actions from "../../../store/actions/index";
 
 const BlogNavbar = (props) => {
@@ -70,23 +71,27 @@ const BlogNavbar = (props) => {
         )
     }
 
+    
+
     return(
         <AppBar position="static" className={BlogNavbarClasses.appbar}>
             <Grid container >
                 <Grid item align="left" xs={4}>
                     <ButtonGroup >
-                        {BlogItems.map((item,index) => <Button className={BlogNavbarClasses.button} size="large" variant="text" key={item} onClick={() => props.onItemChangeHandler(index)} >{item}</Button>)}
+                        <Tab index={0} onItemChangeHandler={props.onItemChangeHandler}/>
+                        <Tab index={1} onItemChangeHandler={props.onItemChangeHandler}/>
+                        <Tab index={2} onItemChangeHandler={props.onItemChangeHandler}/>
+                        <Tab index={3} onItemChangeHandler={props.onItemChangeHandler}/>
                     </ButtonGroup>
                 </Grid>
                 <Grid item align="right" xs={8}>
-                    {props.currentItemID !== 0 && props.token ?
-                        <Link className={BlogNavbarClasses.link} to={{pathname: "/blog/post-share/" + props.currentItemID, 
+                    {props.currentTabID !== 0 && props.token ?
+                        <Link className={BlogNavbarClasses.link} to={{pathname: "/blog/post-share/" + props.currentTabID, 
                             token: props.token, 
+                            currentTabID: props.currentTabID,
                             currentItemID: props.currentItemID,
-                            onLogin: props.onLogin,
-                            onLogout: props.onLogout
                             }}>
-                            <Button className={BlogNavbarClasses.button} size="large" variant="text">{BlogItems[props.currentItemID]} Yeni Paylaşım</Button> 
+                            <Button className={BlogNavbarClasses.button} size="large" variant="text">{IndividualItems[props.currentTabID][props.currentItemID]} Yeni Paylaşım</Button> 
                         </Link>: null }
                     { props.token === null ? adminLoginPopover() : adminLogoutButton() }
                     <Snackbar 

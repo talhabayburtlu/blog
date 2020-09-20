@@ -1,19 +1,22 @@
 import React , {Component} from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import {Grid , Button , Typography, Card, CardHeader, CardContent, Snackbar, SnackbarContent} from "@material-ui/core";
+import {Grid , Button , Typography, Card, CardHeader, CardContent, Snackbar, SnackbarContent, CircularProgress} from "@material-ui/core";
 import Pagination from '@material-ui/lab/Pagination';
 import axios from "axios";
 
 import BlogStyles from "./BlogStyles"
-import BlogItems  from "./BlogItems"
+import {BlogItems, IndividualItems}  from "./BlogItems"
 import PostOption from "./PostOption/PostOption"
 import BlogNavbar from "../../components/Blog/BlogNavbar/BlogNavbar";
 import * as actions from "../../store/actions/index";
 
 class Blog extends Component {
+    // STATE
+
     state = {
-        currentItemID : 0,
+        currentTabID : 0,
+        currentItemID: 0,
         posts: [],
         total: 0,
         currentPage: 1,
@@ -21,14 +24,22 @@ class Blog extends Component {
         deletePostDialog: false,
     }
 
-    onItemChangeHandler =  async (itemID) => {
-        const currentPage = itemID !== this.state.currentItemID ? 1 : this.state.currentPage;
-        const specified = itemID !== 0 ? "/"+ BlogItems[itemID]: "";
+    // FUNCTIONS
+
+    onItemChangeHandler = async (tabID = this.state.currentTabID,itemID = this.state.currentItemID) => {
+        const currentPage = tabID !== this.state.currentTabID ? 1 : this.state.currentPage;
+        let specified = tabID !== 0 ? "/"+ BlogItems[tabID] : "";
+        specified += itemID !== 0 ? "/" + IndividualItems[tabID][itemID] : ""
 
         await axios({method: "get" , url: "/posts" + specified + "/" + (currentPage - 1) })
         .then((response) => {
             console.log(response)
-            this.setState({currentItemID: itemID, posts: response.data.posts , total: response.data.total, currentPage, shouldRenderPosts: true})
+            this.setState({
+                currentTabID: tabID,currentItemID: 
+                itemID ,posts: response.data.posts , 
+                total: response.data.total, 
+                currentPage, shouldRenderPosts: true
+            })
         })
         .catch((e) => {
             console.log(e)
@@ -37,15 +48,14 @@ class Blog extends Component {
 
     onCurrentPageChangeHandler = async (event,pageValue) => {
         await this.setState({currentPage: pageValue, shouldRenderPosts: false})
-        await this.onItemChangeHandler(this.state.currentItemID)
+        await this.onItemChangeHandler()
     }
 
     componentDidMount() {
-        const itemId = this.props.location.state !== undefined && this.props.location.state.selectedItemId !== null ? 
-            this.props.location.state.selectedItemId : 0;
-
-        this.onItemChangeHandler(itemId);
+        this.onItemChangeHandler();
     }
+
+    // COMPONENTS
 
     snackbar = (classes) => (
         <Snackbar 
@@ -69,13 +79,18 @@ class Blog extends Component {
         return (
             <React.Fragment>
                 <Grid container className={classes.grid}>
-                    <BlogNavbar currentItemID={this.state.currentItemID} 
+                    <BlogNavbar currentTabID={this.state.currentTabID}
+                                currentItemID={this.state.currentItemID} 
                                 onItemChangeHandler={this.onItemChangeHandler}
                     />
 
-                    <Grid item container xs={12}>
+
+                     {this.state.posts.length > 0 ? <Grid item container xs={12}>
                         <Grid item xs={12} style={{margin: "30px 0px"}}>
-                            <Typography className={classes.title} variant="h4">{BlogItems[this.state.currentItemID]}</Typography>
+                            <Typography className={classes.title} variant="h4">
+                                {BlogItems[this.state.currentTabID]}
+                                {this.state.currentTabID !== 0 ? " - " + IndividualItems[this.state.currentTabID][this.state.currentItemID] : null}
+                            </Typography>
                         </Grid>
 
                         {this.state.shouldRenderPosts ? this.state.posts.map((post,index) => 
@@ -87,7 +102,7 @@ class Blog extends Component {
                                                         subheader={<Typography className={classes.cardSubtitle} variant="body2">{((new Date(post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
                                         </Grid>
                                         {this.props.token !== null ? <Grid item xs={3} align="right">
-                                           <PostOption post={post} token={this.props.token} currentItemID={this.state.currentItemID} onDeleteHandler={this.onItemChangeHandler}/>
+                                           <PostOption post={post} token={this.props.token} currentTabID={this.state.currentTabID} onDeleteHandler={this.onItemChangeHandler}/>
                                         </Grid> : null}
                                     </Grid>
 
@@ -96,7 +111,7 @@ class Blog extends Component {
                                         <Grid container alignItems="center">
                                             <Grid item xs={3}>&hellip;</Grid> 
                                             <Grid item xs={9} align="right">
-                                                <Link className={classes.link} to={{pathname: "/blog/post/" + post._id, currentItemID: this.state.currentItemID, onItemChangeHandler: this.onItemChangeHandler}}>
+                                                <Link className={classes.link} to={{pathname: "/blog/post/" + post._id, currentTabID: this.state.currentTabID, onItemChangeHandler: this.onItemChangeHandler}}>
                                                     <Button className={[classes.button , classes.cardButton].join(" ")} 
                                                             variant="contained" 
                                                             size="large" >DEVAMINI OKU</Button>
@@ -108,7 +123,7 @@ class Blog extends Component {
                                 </Card>
                             </Grid>
                         ) : null }
-                    </Grid>  
+                    </Grid> : <Grid container justify="center"><CircularProgress size="160px" style={{margin: "50px"}}/></Grid>} 
                     
                     <Grid container justify="center">
                         <Pagination count={Math.ceil(this.state.total / 10)} page={this.state.currentPage} size="large" color="primary" onChange={this.onCurrentPageChangeHandler} />
@@ -132,8 +147,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onLogin: (username,password,closeLoginPopover) => dispatch(actions.login(username,password,closeLoginPopover)),
-        onLogout: () => dispatch(actions.logout()),
         onSnackbarOpen : (message,severity) => dispatch((actions.openSnackbar(message,severity))),
         onSnackbarClose : () => dispatch(actions.closeSnackbar())
     }

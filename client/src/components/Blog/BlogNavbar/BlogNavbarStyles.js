@@ -12,6 +12,11 @@ const BlogNavbarStyles = makeStyles({
         backgroundColor: "#7E1014",
         color: "#FFF9D6",
     },
+    buttonHover: {
+        "&:hover": {
+            backgroundColor: "#7E1014"
+        }
+    },
     link: {
         textDecoration: "none"
     },

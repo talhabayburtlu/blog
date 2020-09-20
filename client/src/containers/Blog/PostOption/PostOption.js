@@ -34,7 +34,7 @@ class PostOption extends Component {
         console.log(this.props)
         await axios({method: "DELETE" , url: "/post/" + this.props.post._id , headers: {Authorization: "Bearer " + this.props.token}})
         .then(() => {
-            this.props.onDeleteHandler(this.props.currentItemID)
+            this.props.onDeleteHandler(this.props.currentTabID)
             this.props.onSnackbarOpen("Paylaşımı Sildiniz!" , "success");
         })
         .catch((e) => {
@@ -56,7 +56,7 @@ class PostOption extends Component {
                     transformOrigin={{vertical: 'top',horizontal: 'right'}} variant="selectedMenu"
                     style={{border: "1px solid #335C67"}}>
                     <Link className={classes.link} 
-                        to={{pathname: "/blog/post-share/" + this.props.currentItemID, 
+                        to={{pathname: "/blog/post-share/" + this.props.currentTabID, 
                         token: this.props.token, 
                         _id: this.props.post._id, 
                         defaultValue: this.props.post}}>
