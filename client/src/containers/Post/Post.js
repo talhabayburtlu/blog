@@ -67,7 +67,8 @@ class Post extends Component {
                                             {block.text}
                                         </Typography>
                                     } else if (block.type === "atomic") {
-                                        const data = this.state.post.entityMap[0][block.entityRanges[0].key].data;
+                                        console.log(this.state.post)
+                                        const data = this.state.post.entityMap[block.entityRanges[0].key].data;
                                         return <Grid item xs={12} align="center" key={block.key}>
                                             <img height={data.height} width={data.width} alt={data.url} src={data.url}/>
                                         </Grid>       
