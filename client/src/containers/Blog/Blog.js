@@ -102,7 +102,12 @@ class Blog extends Component {
                                                         subheader={<Typography className={classes.cardSubtitle} variant="body2">{((new Date(post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
                                         </Grid>
                                         {this.props.token !== null ? <Grid item xs={3} align="right">
-                                           <PostOption post={post} token={this.props.token} currentTabID={this.state.currentTabID} onDeleteHandler={this.onItemChangeHandler}/>
+                                           <PostOption 
+                                            post={post} 
+                                            token={this.props.token} 
+                                            currentTabID={BlogItems.indexOf(post.breadcrumbs[0])}
+                                            currentItemID={IndividualItems[BlogItems.indexOf(post.breadcrumbs[0])].indexOf(post.breadcrumbs[1])} 
+                                            onDeleteHandler={this.onItemChangeHandler}/>
                                         </Grid> : null}
                                     </Grid>
 

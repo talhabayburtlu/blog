@@ -85,8 +85,8 @@ const BlogNavbar = (props) => {
                     </ButtonGroup>
                 </Grid>
                 <Grid item align="right" xs={8}>
-                    {props.currentTabID !== 0 && props.token ?
-                        <Link className={BlogNavbarClasses.link} to={{pathname: "/blog/post-share/" + props.currentTabID, 
+                    {props.currentTabID !== 0 && props.currentItemID !== 0 && props.token ?
+                        <Link className={BlogNavbarClasses.link} to={{pathname: "/blog/post-share/" + props.currentTabID + "/" + props.currentItemID, 
                             token: props.token, 
                             currentTabID: props.currentTabID,
                             currentItemID: props.currentItemID,

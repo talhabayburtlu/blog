@@ -25,7 +25,7 @@ function App() {
             <Route exact path="/hakkimda" component={Hakkımda} />
             <Route exact path="/cv" component={CV} />
             <Route exact path="/blog/post/:_id" component={Post} />
-            <Route path="/blog/post-share/:tabID" component={PostShare} />
+            <Route path="/blog/post-share/:tabID/:itemID" component={PostShare} />
             <Route path="/blog" component={Blog} />
             <Route exact path="/hesaplarim" component={Hesaplarım} />
             <Redirect from="*" to="/hakkimda" />

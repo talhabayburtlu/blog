@@ -18,8 +18,8 @@ class PostShare extends Component {
     onSaveHandler = (data) => {
         const parsedData = JSON.parse(data);
         parsedData.breadcrumbs = [
-            BlogItems[this.props.location.currentTabID] , 
-            IndividualItems[this.props.location.currentTabID][this.props.location.currentItemID]  
+            BlogItems[this.props.match.params.tabID] , 
+            IndividualItems[this.props.match.params.tabID][this.props.match.params.itemID]  
         ]
 
         if (!this.state.defaultValue) {
@@ -57,7 +57,9 @@ class PostShare extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.token === null) {
+        console.log(this.props)
+
+        if (this.props.token === null && !(this.props.match.params.tabID && this.props.match.params.ItemID)) {
             this.props.history.push("/blog")
         }
     }
@@ -75,7 +77,7 @@ class PostShare extends Component {
                 <Grid container className={classes.grid}>
                     <Grid container item style={{marginBottom: "25px"}}>
                         <BlogNavbar
-                            currentTabID={this.props.location.currentTabID} 
+                            currentTabID={this.props.match.params.tabID} 
                             token={this.props.token}
                             onItemChangeHandler={(selectedItemId) => this.props.history.push({pathname: "/blog" , state: {selectedItemId}})} 
                         />
@@ -85,10 +87,10 @@ class PostShare extends Component {
                             <Breadcrumbs separator="→">
                                 <Link className={classes.breadCrumb} color="primary" href="/blog">Blog</Link>
                                 <Typography className={classes.breadCrumb} color="primary">{
-                                    BlogItems[this.props.location.currentTabID]
+                                    BlogItems[this.props.match.params.tabID]
                                 }</Typography>
                                 <Typography className={classes.breadCrumb} color="primary">{
-                                    IndividualItems[this.props.location.currentTabID][this.props.location.currentItemID]
+                                    IndividualItems[this.props.match.params.tabID][this.props.match.params.itemID]
                                 } </Typography>
                             </Breadcrumbs>
                         </Grid>

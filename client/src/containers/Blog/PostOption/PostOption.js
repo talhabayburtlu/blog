@@ -56,9 +56,9 @@ class PostOption extends Component {
                     transformOrigin={{vertical: 'top',horizontal: 'right'}} variant="selectedMenu"
                     style={{border: "1px solid #335C67"}}>
                     <Link className={classes.link} 
-                        to={{pathname: "/blog/post-share/" + this.props.currentTabID, 
+                        to={{pathname: "/blog/post-share/" + this.props.currentTabID + "/" + this.props.currentItemID, 
                         token: this.props.token, 
-                        _id: this.props.post._id, 
+                        _id: this.props.post._id,
                         defaultValue: this.props.post}}>
                         <MenuItem className={[classes.button, classes.cardButton].join(" ")}>PAYLAŞIMI DÜZENLE</MenuItem>
                     </Link>
