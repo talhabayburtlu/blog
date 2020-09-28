@@ -2,11 +2,13 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom"
 import { connect } from "react-redux";
 import { Grid,  Breadcrumbs, Link, Typography} from "@material-ui/core";
+import {MuiThemeProvider } from '@material-ui/core/styles'
 import MUIRichTextEditor from 'mui-rte'
 import axios from "axios";
 
 import {BlogItems,IndividualItems} from "../../../containers/Blog/BlogItems";
 import PostShareStyles from "./PostShareStyles"
+import theme from "../../../theme/postShareRTEThemes";
 import BlogNavbar from "../../../components/Blog/BlogNavbar/BlogNavbar";
 import * as actions from "../../../store/actions/index";
 
@@ -17,6 +19,7 @@ class PostShare extends Component {
 
     onSaveHandler = (data) => {
         const parsedData = JSON.parse(data);
+        //const parsedData = convertToRaw(data);
         parsedData.breadcrumbs = [
             BlogItems[this.props.match.params.tabID] , 
             IndividualItems[this.props.match.params.tabID][this.props.match.params.itemID]  
@@ -73,13 +76,15 @@ class PostShare extends Component {
     
         return (
             <React.Fragment>
-                {console.log(this.props)}
                 <Grid container className={classes.grid}>
                     <Grid container item style={{marginBottom: "25px"}}>
                         <BlogNavbar
                             currentTabID={this.props.match.params.tabID} 
                             token={this.props.token}
-                            onItemChangeHandler={(selectedItemId) => this.props.history.push({pathname: "/blog" , state: {selectedItemId}})} 
+                            onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
+                                {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }}
+                            )}
+                                                        
                         />
                     </Grid>
                     <Grid container item className={classes.gridContainerItem}>
@@ -98,11 +103,15 @@ class PostShare extends Component {
                             <Typography className={classes.breadCrumb} color="primary">{defaultValue ? "Paylaşım Düzenleme" : "Yeni Paylaşım" }</Typography>
                         </Grid>
                         <Grid item xs={12} style={{ borderRadius: "5px" , minHeight: "475px"}}>
-                            <MUIRichTextEditor className={classes.textEditor}
-                            defaultValue={defaultValue}
-                            label="Buraya paylaşımı yazınız." 
-                            toolbar inlineToolbar 
-                            onSave={(data) => this.onSaveHandler(data)}/>
+                            <MuiThemeProvider theme={theme}>
+                                <MUIRichTextEditor
+                                    defaultValue={defaultValue}
+                                    label="Buraya paylaşımı yazınız." 
+                                    toolbar inlineToolbar 
+                                    onSave={(data) => this.onSaveHandler(data)} />
+                            </MuiThemeProvider>
+
+                           
                         </Grid>
                     </Grid>
                 </Grid>               

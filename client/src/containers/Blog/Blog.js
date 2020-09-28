@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import {Grid , Button , Typography, Card, CardHeader, CardContent, Snackbar, SnackbarContent, CircularProgress} from "@material-ui/core";
 import Pagination from '@material-ui/lab/Pagination';
 import axios from "axios";
+import MUIRichTextEditor from 'mui-rte'
 
 import BlogStyles from "./BlogStyles"
 import {BlogItems, IndividualItems}  from "./BlogItems"
@@ -33,12 +34,13 @@ class Blog extends Component {
 
         await axios({method: "get" , url: "/posts" + specified + "/" + (currentPage - 1) })
         .then((response) => {
-            console.log(response)
             this.setState({
-                currentTabID: tabID,currentItemID: 
-                itemID ,posts: response.data.posts , 
+                currentTabID: tabID,
+                currentItemID: itemID ,
+                posts: response.data.posts , 
                 total: response.data.total, 
-                currentPage, shouldRenderPosts: true
+                currentPage, 
+                shouldRenderPosts: true
             })
         })
         .catch((e) => {
@@ -52,7 +54,13 @@ class Blog extends Component {
     }
 
     componentDidMount() {
-        this.onItemChangeHandler();
+        console.log(this.props)
+        if ( this.props.location.state && 
+            this.props.location.state.currentTabID && this.props.location.state.currentItemID){ // Handeling 
+                this.onItemChangeHandler(this.props.location.state.currentTabID, this.props.location.state.currentItemID);
+        } else {
+            this.onItemChangeHandler();
+        }
     }
 
     // COMPONENTS
@@ -112,7 +120,13 @@ class Blog extends Component {
                                     </Grid>
 
                                     <CardContent>
-                                        <Typography className={classes.cardBody} variant="body1" paragraph >{post.blocks[1].text}</Typography>
+
+                                        <MUIRichTextEditor toolbar={false} defaultValue={JSON.stringify({
+                                            blocks: [post.blocks[1]], 
+                                            entityMap: post.entityMap ? post.entityMap : {}
+                                        })} readOnly/>
+
+                                        {/*<Typography className={classes.cardBody} variant="body1" paragraph >{post.blocks[1].text}</Typography> */}
                                         <Grid container alignItems="center">
                                             <Grid item xs={3}>&hellip;</Grid> 
                                             <Grid item xs={9} align="right">

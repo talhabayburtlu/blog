@@ -91,7 +91,9 @@ const BlogNavbar = (props) => {
                             currentTabID: props.currentTabID,
                             currentItemID: props.currentItemID,
                             }}>
-                            <Button className={BlogNavbarClasses.button} size="large" variant="text">{IndividualItems[props.currentTabID][props.currentItemID]} Yeni Paylaşım</Button> 
+                            <Button className={BlogNavbarClasses.button} size="large" variant="text">
+                                {IndividualItems[props.currentTabID][props.currentItemID]} Yeni Paylaşım
+                            </Button> 
                         </Link>: null }
                     { props.token === null ? adminLoginPopover() : adminLogoutButton() }
                     <Snackbar 

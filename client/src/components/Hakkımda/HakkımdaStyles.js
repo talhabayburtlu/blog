@@ -18,7 +18,7 @@ const HakkımdaStyles = makeStyles({
     },
     avatarLine: {
         width: "100%",
-        border: "1.5px solid #7E1014"
+        border: "1px solid #7E1014"
     },
     divider: {
         backgroundColor: "#7E1014",

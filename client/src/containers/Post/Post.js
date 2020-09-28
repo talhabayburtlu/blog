@@ -3,6 +3,7 @@ import {Redirect, withRouter} from "react-router-dom"
 import { connect } from "react-redux";
 import { Grid, Typography, Card, CardHeader , CardContent , CircularProgress} from "@material-ui/core";
 import axios from "axios";
+import MUIRichTextEditor from 'mui-rte'
 
 import PostStyles from "./PostStyles";
 import PostOption from "../Blog/PostOption/PostOption";
@@ -42,10 +43,11 @@ class Post extends Component {
             this.state.error ? <Redirect to="/blog" /> :
             <Grid container className={classes.grid}>
                 <BlogNavbar
-                    currentTabID={this.props.location.currentTabID} 
-                    token={this.props.token}
-                    onItemChangeHandler={(selectedTabID) => this.props.history.push({pathname: "/blog" , state: {selectedTabID}})} 
-                    onLogin={this.props.onLogin} onLogout={this.props.onLogout} />
+                    currentTabID={0} 
+                    currentItemID={0}
+                    onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
+                        {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }})}
+                    />
 
                 <Grid item xs={12}>
                     <Card className={classes.card}>
@@ -61,20 +63,30 @@ class Post extends Component {
                             
                             
                             <CardContent className={classes.cardContent}>
-                                {this.state.post.blocks.slice(1).map((block) => {
-                                    if (block.type === "unstyled") {
-                                        return <Typography className={classes.cardBody} variant="body1" paragraph key={block.key}>
-                                            {block.text}
-                                        </Typography>
-                                    } else if (block.type === "atomic") {
-                                        console.log(this.state.post)
-                                        const data = this.state.post.entityMap[block.entityRanges[0].key].data;
-                                        return <Grid item xs={12} align="center" key={block.key}>
-                                            <img height={data.height} width={data.width} alt={data.url} src={data.url}/>
-                                        </Grid>       
-                                    }
-                                    return null   
-                                })}
+                                <MUIRichTextEditor toolbar={false} defaultValue={JSON.stringify({
+                                    blocks: this.state.post.blocks.slice(1) , 
+                                    entityMap: this.state.post.entityMap ? this.state.post.entityMap : {}
+                                })} readOnly/>
+
+                                {/*<Editor editorState={EditorState.createWithContent(convertFromRaw({
+                                    blocks: this.state.post.blocks.slice(1),
+                                    entityMap: this.state.post.entityMap ? this.state.post.entityMap : {}
+                                }))} readOnly/>*/}
+
+                                { /* this.state.post.blocks.slice(1).map((block) => {
+                                        if (block.type === "unstyled") {
+                                            return <Typography className={classes.cardBody} variant="body1" paragraph key={block.key}>
+                                                {block.text}
+                                            </Typography>
+                                        } else if (block.type === "atomic") {
+                                            console.log(this.state.post)
+                                            const data = this.state.post.entityMap[block.entityRanges[0].key].data;
+                                            return <Grid item xs={12} align="center" key={block.key}>
+                                                <img height={data.height} width={data.width} alt={data.url} src={data.url}/>
+                                            </Grid>       
+                                        }
+                                        return null   
+                                    }) */ }
                                 
                             </CardContent>
                         </Card>
