@@ -10,6 +10,7 @@ import {BlogItems,IndividualItems} from "../../../containers/Blog/BlogItems";
 import PostShareStyles from "./PostShareStyles"
 import theme from "../../../theme/postShareRTEThemes";
 import BlogNavbar from "../../../components/Blog/BlogNavbar/BlogNavbar";
+import Decorators from "../../../components/Blog/Decorators/Decorators";
 import * as actions from "../../../store/actions/index";
 
 class PostShare extends Component {
@@ -108,7 +109,8 @@ class PostShare extends Component {
                                     defaultValue={defaultValue}
                                     label="Buraya paylaşımı yazınız." 
                                     toolbar inlineToolbar 
-                                    onSave={(data) => this.onSaveHandler(data)} />
+                                    onSave={(data) => this.onSaveHandler(data)} 
+                                    decorators={Decorators} />
                             </MuiThemeProvider>
 
                            

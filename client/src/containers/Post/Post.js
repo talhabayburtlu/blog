@@ -8,6 +8,7 @@ import MUIRichTextEditor from 'mui-rte'
 import PostStyles from "./PostStyles";
 import PostOption from "../Blog/PostOption/PostOption";
 import BlogNavbar from "../../components/Blog/BlogNavbar/BlogNavbar";
+import Decorators from "../../components/Blog/Decorators/Decorators";
 
 class Post extends Component {
     state = {
@@ -63,31 +64,15 @@ class Post extends Component {
                             
                             
                             <CardContent className={classes.cardContent}>
-                                <MUIRichTextEditor toolbar={false} defaultValue={JSON.stringify({
-                                    blocks: this.state.post.blocks.slice(1) , 
-                                    entityMap: this.state.post.entityMap ? this.state.post.entityMap : {}
-                                })} readOnly/>
-
-                                {/*<Editor editorState={EditorState.createWithContent(convertFromRaw({
-                                    blocks: this.state.post.blocks.slice(1),
-                                    entityMap: this.state.post.entityMap ? this.state.post.entityMap : {}
-                                }))} readOnly/>*/}
-
-                                { /* this.state.post.blocks.slice(1).map((block) => {
-                                        if (block.type === "unstyled") {
-                                            return <Typography className={classes.cardBody} variant="body1" paragraph key={block.key}>
-                                                {block.text}
-                                            </Typography>
-                                        } else if (block.type === "atomic") {
-                                            console.log(this.state.post)
-                                            const data = this.state.post.entityMap[block.entityRanges[0].key].data;
-                                            return <Grid item xs={12} align="center" key={block.key}>
-                                                <img height={data.height} width={data.width} alt={data.url} src={data.url}/>
-                                            </Grid>       
-                                        }
-                                        return null   
-                                    }) */ }
-                                
+                                <MUIRichTextEditor toolbar={false} 
+                                    defaultValue={JSON.stringify({
+                                        blocks: this.state.post.blocks.slice(1) , 
+                                        entityMap: this.state.post.entityMap ? this.state.post.entityMap : {}
+                                    })} 
+                                    decorators={Decorators}
+                                    readOnly
+                                />
+    
                             </CardContent>
                         </Card>
                 </Grid>
