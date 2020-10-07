@@ -67,16 +67,20 @@ class Blog extends Component {
 
     snackbar = (classes) => (
         <Snackbar 
-        open={this.props.snackbarOpen}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        autoHideDuration={3000} 
-        onClose={this.props.onSnackbarClose}
-    >
-        <SnackbarContent 
-            className={this.props.snackbarSeverity === "success" ? classes.snackBarSuccess :
-            this.props.snackbarSeverity === "error" ? classes.snackBarFail : null} 
-            message={this.props.snackbarMessage} 
-            style={{borderRadius: "10px" }}/>
+            open={this.props.snackbarOpen}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            autoHideDuration={3000} 
+            onClose={this.props.onSnackbarClose}
+        >
+            <SnackbarContent 
+                className={
+                    this.props.snackbarSeverity === "warning" ? classes.snackBarWarning :
+                    this.props.snackbarSeverity === "success" ? classes.snackBarSuccess :
+                    this.props.snackbarSeverity === "error" ? classes.snackBarFail : null
+                } 
+                message={this.props.snackbarMessage}
+                style={{borderRadius: "10px"}}
+            />
     </Snackbar>
     )
 
@@ -126,7 +130,7 @@ class Blog extends Component {
                                             entityMap: post.entityMap ? post.entityMap : {}
                                         })} readOnly/>
 
-                                        {/*<Typography className={classes.cardBody} variant="body1" paragraph >{post.blocks[1].text}</Typography> */}
+                                        
                                         <Grid container alignItems="center">
                                             <Grid item xs={3}>&hellip;</Grid> 
                                             <Grid item xs={9} align="right">
@@ -148,8 +152,9 @@ class Blog extends Component {
                         <Pagination count={Math.ceil(this.state.total / 10)} page={this.state.currentPage} size="large" color="primary" onChange={this.onCurrentPageChangeHandler} />
                     </Grid>
 
-                    {this.snackbar(classes)}
-                </Grid>               
+                    
+                </Grid>
+                {this.snackbar(classes)}               
             </React.Fragment>
         )
     }

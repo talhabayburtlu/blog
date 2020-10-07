@@ -31,14 +31,13 @@ class PostOption extends Component {
     }
 
     onDeletePostHandler = async () => {
-        console.log(this.props)
         await axios({method: "DELETE" , url: "/post/" + this.props.post._id , headers: {Authorization: "Bearer " + this.props.token}})
         .then(() => {
             this.props.onDeleteHandler(this.props.currentTabID)
             this.props.onSnackbarOpen("Paylaşımı Sildiniz!" , "success");
         })
         .catch((e) => {
-            console.log(e)
+            this.props.onSnackbarOpen("Bu Yöneticinin Paylaşım Silme Yetkisi Bulunmamaktadır!" , "warning")
         })
     }
 

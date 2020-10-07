@@ -8,14 +8,20 @@ const auth = async (req, res, next) => {
         const admin = await Admin.findOne({ _id: decoded._id, 'token': token })
         
         if (!admin) {
-            throw new Error()
+            throw new Error("Lütfen admin kimliğini doğrulayınız.")
+        } else if (!admin.hasPermission) {
+            throw new Error("Bu Yöneticinin Yetkisi Bulunmamaktadır!")
         }
 
         req.token = token
         req.admin = admin
         next()
     } catch (e) {
-        res.status(401).send({ error: "Lütfen admin kimliğini doğrulayınız." })
+        if (e.message === "Lütfen admin kimliğini doğrulayınız.")
+            res.status(401).send({ error: "Lütfen admin kimliğini doğrulayınız." })
+        else if (e.message === "Bu Yöneticinin Yetkisi Bulunmamaktadır!")
+            res.status(403).send({ error: e })
+        
     }
 }
 

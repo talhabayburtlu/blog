@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom"
 import { connect } from "react-redux";
-import { Grid,  Breadcrumbs, Link, Typography} from "@material-ui/core";
+import { Grid,  Breadcrumbs, Link, Typography } from "@material-ui/core";
 import {MuiThemeProvider } from '@material-ui/core/styles'
 import MUIRichTextEditor from 'mui-rte'
 import axios from "axios";
@@ -20,7 +20,6 @@ class PostShare extends Component {
 
     onSaveHandler = (data) => {
         const parsedData = JSON.parse(data);
-        //const parsedData = convertToRaw(data);
         parsedData.breadcrumbs = [
             BlogItems[this.props.match.params.tabID] , 
             IndividualItems[this.props.match.params.tabID][this.props.match.params.itemID]  
@@ -29,20 +28,31 @@ class PostShare extends Component {
         if (!this.state.defaultValue) {
             axios({method: "POST" , url: "/posts" , data: parsedData, headers: {Authorization: "Bearer " + this.props.token}})
             .then((response) => {
-            this.props.onSnackbarOpen("Yeni paylaşım yaptınız!" , "success")
-            this.props.history.push("/blog")
+                this.props.onSnackbarOpen("Yeni paylaşım yaptınız!" , "success")
             })
             .catch((error) => {
-                console.log(error)
+                if (error.response.status === 403) {
+                    this.props.onSnackbarOpen("Bu Yöneticinin Yeni Paylaşım Yapma Yetkisi Bulunmamaktadır!" , "warning")
+                } else {
+                    console.log(error)
+                }
+            }).finally(() => {
+                this.props.history.push("/blog")
             })
         } else {
             axios({method: "PUT" , url: "/post/" + this.props.location.defaultValue._id , data: parsedData, headers: {Authorization: "Bearer " + this.props.token}})
             .then((response) => {
-            this.props.onSnackbarOpen("Paylaşımı düzenlediniz!" , "success")
-            this.props.history.push("/blog")
+                this.props.onSnackbarOpen("Paylaşımı düzenlediniz!" , "success")
+                this.props.history.push("/blog")
             })
             .catch((error) => {
-                console.log(error)
+                if (error.response.status === 403) {
+                    this.props.onSnackbarOpen("Bu Yöneticinin Paylaşım Düzenleme Yetkisi Bulunmamaktadır!" , "warning")
+                } else {
+                    console.log(error)
+                }
+            }).finally(() => {
+                this.props.history.push("/blog")
             })
         }
     }
@@ -80,8 +90,8 @@ class PostShare extends Component {
                 <Grid container className={classes.grid}>
                     <Grid container item style={{marginBottom: "25px"}}>
                         <BlogNavbar
-                            currentTabID={this.props.match.params.tabID} 
-                            token={this.props.token}
+                            currentTabID={0} 
+                            currentItemID={0} 
                             onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
                                 {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }}
                             )}
@@ -116,7 +126,7 @@ class PostShare extends Component {
                            
                         </Grid>
                     </Grid>
-                </Grid>               
+                </Grid>             
             </React.Fragment>
         )    
     }
@@ -131,6 +141,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onSnackbarOpen : (message,severity) => dispatch((actions.openSnackbar(message,severity))),
+        onSnackbarClose : () => dispatch(actions.closeSnackbar())
     }
 }
 
