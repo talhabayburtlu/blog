@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import BlogNavbarStyles from "./BlogNavbarStyles";
 import Tab from "./Tab";
+import BlogSnackbar from "../../Snackbar/BlogSnackbar";
 import {IndividualItems} from "../../../containers/Blog/BlogItems";
 import * as actions from "../../../store/actions/index";
 
@@ -54,7 +55,7 @@ const BlogNavbar = (props) => {
                             </form>
                         </Grid>
                         <Grid item xs={12} align="center">
-                            <Button className={BlogNavbarClasses.button} 
+                            <Button className={[BlogNavbarClasses.button, BlogNavbarClasses.buttonHover].join(" ")} 
                                     onClick={() => props.onLogin(usernameInput, passwordInput, onPopoverCloseHandler, props.onSnackbarOpen)}
                                     style={{marginTop: "25px"}}> Giris Yap </Button>
                         </Grid>
@@ -96,18 +97,7 @@ const BlogNavbar = (props) => {
                             </Button> 
                         </Link>: null }
                     { props.token === null ? adminLoginPopover() : adminLogoutButton() }
-                    <Snackbar 
-                        open={props.snackbarOpen}
-                        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                        autoHideDuration={3000} 
-                        onClose={props.onSnackbarClose}
-                    >
-                        <SnackbarContent 
-                            className={props.snackbarSeverity === "success" ? BlogNavbarClasses.snackBarSuccess :
-                            props.snackbarSeverity === "error" ? BlogNavbarClasses.snackBarFail : null} 
-                            message={props.snackbarMessage} 
-                            style={{borderRadius: "10px" }}/>
-                    </Snackbar>
+                   <BlogSnackbar />
 
                 </Grid>
             </Grid>
@@ -119,9 +109,6 @@ const BlogNavbar = (props) => {
 const mapStateToProps = state => {
     return {
         token: state.admin.token,
-        snackbarOpen : state.snackbar.open,
-        snackbarMessage : state.snackbar.message,
-        snackbarSeverity : state.snackbar.severity
     };
 };
 

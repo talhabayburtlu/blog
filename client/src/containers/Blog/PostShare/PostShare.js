@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom"
 import { connect } from "react-redux";
-import { Grid,  Breadcrumbs, Link, Typography } from "@material-ui/core";
+import { Grid,  Breadcrumbs, Link, Typography, Hidden } from "@material-ui/core";
 import {MuiThemeProvider } from '@material-ui/core/styles'
 import MUIRichTextEditor from 'mui-rte'
 import axios from "axios";
@@ -10,6 +10,8 @@ import {BlogItems,IndividualItems} from "../../../containers/Blog/BlogItems";
 import PostShareStyles from "./PostShareStyles"
 import theme from "../../../theme/postShareRTEThemes";
 import BlogNavbar from "../../../components/Blog/BlogNavbar/BlogNavbar";
+import BlogSnackbar from "../../../components/Snackbar/BlogSnackbar";
+import BlogDrawer from "../../../components/Blog/Drawer/BlogDrawer"
 import Decorators from "../../../components/Blog/Decorators/Decorators";
 import * as actions from "../../../store/actions/index";
 
@@ -43,7 +45,6 @@ class PostShare extends Component {
             axios({method: "PUT" , url: "/post/" + this.props.location.defaultValue._id , data: parsedData, headers: {Authorization: "Bearer " + this.props.token}})
             .then((response) => {
                 this.props.onSnackbarOpen("Paylaşımı düzenlediniz!" , "success")
-                this.props.history.push("/blog")
             })
             .catch((error) => {
                 if (error.response.status === 403) {
@@ -89,14 +90,25 @@ class PostShare extends Component {
             <React.Fragment>
                 <Grid container className={classes.grid}>
                     <Grid container item style={{marginBottom: "25px"}}>
-                        <BlogNavbar
-                            currentTabID={0} 
-                            currentItemID={0} 
-                            onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
-                                {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }}
-                            )}
-                                                        
-                        />
+                        <Hidden xsDown >
+                            <BlogNavbar
+                                currentTabID={0} 
+                                currentItemID={0} 
+                                onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
+                                    {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }}
+                                )}                 
+                            />
+                        </Hidden>
+
+                        <Hidden smUp>
+                            <BlogDrawer currentTabID={0}
+                                        currentItemID={0} 
+                                        onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
+                                            {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }}
+                                        )}   
+                            />
+                        </Hidden>
+
                     </Grid>
                     <Grid container item className={classes.gridContainerItem}>
                         <Grid item xs={8} style={{marginTop: "25px"}}>
@@ -126,7 +138,8 @@ class PostShare extends Component {
                            
                         </Grid>
                     </Grid>
-                </Grid>             
+                </Grid>
+
             </React.Fragment>
         )    
     }

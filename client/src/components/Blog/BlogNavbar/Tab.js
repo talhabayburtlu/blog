@@ -27,7 +27,7 @@ const Tab = (props) => {
     const itemsMenu = () => (
         info.items !== [] ?  
         <Menu
-            PaperProps={{style: {borderRadius: "0px"}}}
+            PaperProps={{style: {borderRadius: "0px" , backgroundColor: "#7E1014"}}}
             anchorEl={anchorEl}
             getContentAnchorEl={null}
             open={Boolean(anchorEl)}

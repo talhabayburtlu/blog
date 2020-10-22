@@ -2,12 +2,14 @@ import {withStyles} from "@material-ui/core/styles"
 
 const BlogStyles = withStyles((theme) => ({
     button: {
-        margin: "5px 10px",
+        borderRadius: "10px",
+        margin: "5px",
         height: "100%",
         fontFamily: "adobe-garamond-pro", 
         backgroundColor: "#7E1014",
         color: "#FFF9D6",
         "&:hover": {
+            boxShadow: "3px 3px 3px 0px rgba(0,0,0,0.75);",
             backgroundColor: "#7E1014"
         }
     },
@@ -35,8 +37,18 @@ const BlogStyles = withStyles((theme) => ({
         backgroundColor: "#FFF3B0",
         border: "2px solid #7E1014"
     },
-    
-    
+    snackBarSuccess: {
+        backgroundColor: "#388050"
+    },
+    snackBarFail: {
+        backgroundColor: "#7E1014"
+    },
+    snackBarInformation: {
+        backgroundColor: "#335C67"
+    },
+    snackBarWarning: {
+        backgroundColor: "#E09F3E"
+    }
 }));
 
 export default BlogStyles;

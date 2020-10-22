@@ -1,13 +1,14 @@
 import React , {Component} from "react";
 import {Redirect, withRouter} from "react-router-dom"
 import { connect } from "react-redux";
-import { Grid, Typography, Card, CardHeader , CardContent , CircularProgress} from "@material-ui/core";
+import { Grid, Typography, Card, CardHeader , CardContent , CircularProgress, Hidden} from "@material-ui/core";
 import axios from "axios";
 import MUIRichTextEditor from 'mui-rte'
 
 import PostStyles from "./PostStyles";
 import PostOption from "../Blog/PostOption/PostOption";
 import BlogNavbar from "../../components/Blog/BlogNavbar/BlogNavbar";
+import BlogDrawer from "../../components/Blog/Drawer/BlogDrawer";
 import Decorators from "../../components/Blog/Decorators/Decorators";
 
 class Post extends Component {
@@ -43,12 +44,24 @@ class Post extends Component {
             {this.state.post === null ? null :
             this.state.error ? <Redirect to="/blog" /> :
             <Grid container className={classes.grid}>
-                <BlogNavbar
-                    currentTabID={0} 
-                    currentItemID={0}
-                    onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
-                        {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }})}
+                <Hidden xsDown >
+                    <BlogNavbar
+                        currentTabID={0} 
+                        currentItemID={0}
+                        onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
+                            {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }})}
                     />
+                </Hidden>
+
+                <Hidden smUp>
+                    <BlogDrawer currentTabID={0}
+                                currentItemID={0} 
+                                onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
+                                    {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }}
+                                )}   
+                    />
+                </Hidden>
+                
 
                 <Grid item xs={12}>
                     <Card className={classes.card}>

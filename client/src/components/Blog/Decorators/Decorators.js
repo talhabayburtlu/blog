@@ -1,35 +1,44 @@
 import React from "react";
 
+import DecoratorStyles from "../Decorators/DecoratorStyles";
+
 const youtubeDecorator = (props) => {
+    const DecoratorClasses =  DecoratorStyles();
+
     const decoratedText = props.decoratedText;
     const link = decoratedText.replace("watch?v=" , "embed/")
 
     return (
         <div style={{margin: "10px" , align:"center", textAlign:"center"}}>
-            <iframe width="420" height="315" src={link} frameborder="0" allowFullScreen title="video"/>
+            <iframe src={link} frameborder="0" allowFullScreen title="video"
+                className={DecoratorClasses.youtube}/>
         </div>
     )
 }
 
 const spotifyDecorator = (props) => {
+    const DecoratorClasses =  DecoratorStyles();
+
     const decoratedText = props.decoratedText;
     const link = decoratedText.replace(".com/" , ".com/embed/")
 
     return (
         <div style={{margin: "10px" , align:"center", textAlign:"center"}}>
-            <iframe width="500" height="80" src={link} frameborder="0"  
+            <iframe className={DecoratorClasses.spotify} src={link} frameborder="0"  
                 allowtransparency="true" allow="encrypted-media" title="spotify"/>
         </div>
     )
 }
 
 const twitterDecorator = (props) => {
+    const DecoratorClasses =  DecoratorStyles();
+
     const decoratedText = props.decoratedText;
     const link = "https://twitframe.com/show?url=" + decoratedText;
 
     return (
         <div style={{margin: "10px" , align:"center", textAlign:"center"}}>
-            <iframe width="500" height="500" src={link} frameborder="0"  
+            <iframe className={DecoratorClasses.twitter} src={link} frameborder="0"  
                 allowtransparency="true" allow="encrypted-media" title="spotify"/>
         </div>
     )

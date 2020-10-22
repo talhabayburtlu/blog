@@ -22,8 +22,11 @@ router.post("/posts" , auth , async (req,res) => {
 });
 
 router.get("/posts/:page" , async(req,res) => {
-    const posts = await Post.find({}).sort([["createdAt", -1]]).skip(10 * req.params.page).limit(10);
-    const total = await Post.find({}).count({})
+    const query = req.query[0] !== undefined ? 
+        {"blocks.0.text" : {"$regex" : req.query[0], "$options" : "i"}} : {}
+
+    const posts = await Post.find(query).sort([["createdAt", -1]]).skip(10 * req.params.page).limit(10);
+    const total = await Post.find(query).count({})
 
     try {
         res.status(201).send({posts,total})
@@ -33,10 +36,11 @@ router.get("/posts/:page" , async(req,res) => {
 })
 
 router.get("/posts/:tabName/:page" , async(req,res) => {
-    const posts = await Post.find({breadcrumbs: {$in : [req.params.tabName]}}).sort([["createdAt", -1]]).skip(10 * req.params.page).limit(10);
-    const total = await Post.find({breadcrumbs: {$in : [req.params.tabName]}}).count({})
+    const query = req.query[0] !== undefined ? 
+        {"blocks.0.text" : {"$regex" : req.query[0], "$options" : "i"}} : {}
 
-    console.log("test")
+    const posts = await Post.find({...query ,breadcrumbs: {$in : [req.params.tabName]}}).sort([["createdAt", -1]]).skip(10 * req.params.page).limit(10);
+    const total = await Post.find({...query, breadcrumbs: {$in : [req.params.tabName]}}).count({})
 
     try {
         res.status(201).send({posts,total})
@@ -46,8 +50,11 @@ router.get("/posts/:tabName/:page" , async(req,res) => {
 })
 
 router.get("/posts/:tabName/:itemName/:page" , async(req,res) => {
-    const posts = await Post.find({breadcrumbs: [req.params.tabName , req.params.itemName]}).sort([["createdAt", -1]]).skip(10 * req.params.page).limit(10);
-    const total = await Post.find({breadcrumbs: [req.params.tabName , req.params.itemName]}).count({})
+    const query = req.query[0] !== undefined ? 
+        {"blocks.0.text" : {"$regex" : req.query[0], "$options" : "i"}} : {}
+
+    const posts = await Post.find({...query , breadcrumbs: [req.params.tabName , req.params.itemName]}).sort([["createdAt", -1]]).skip(10 * req.params.page).limit(10);
+    const total = await Post.find({...query , breadcrumbs: [req.params.tabName , req.params.itemName]}).count({})
 
     try {
         res.status(201).send({posts,total})

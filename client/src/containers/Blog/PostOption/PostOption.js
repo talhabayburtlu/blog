@@ -6,6 +6,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import axios from "axios";
 
 import PostOptionStyles from "./PostOptionStyles"
+import BlogSnackbar from "../../../components/Snackbar/BlogSnackbar";
 import * as actions from "../../../store/actions/index";
 
 class PostOption extends Component {
@@ -31,12 +32,17 @@ class PostOption extends Component {
     }
 
     onDeletePostHandler = async () => {
+        console.log("test")
+
         await axios({method: "DELETE" , url: "/post/" + this.props.post._id , headers: {Authorization: "Bearer " + this.props.token}})
         .then(() => {
-            this.props.onDeleteHandler(this.props.currentTabID)
+            console.log("test1")
+            this.props.onDeleteHandler()
             this.props.onSnackbarOpen("Paylaşımı Sildiniz!" , "success");
+            console.log("test2")
         })
         .catch((e) => {
+            console.log("test3")
             this.props.onSnackbarOpen("Bu Yöneticinin Paylaşım Silme Yetkisi Bulunmamaktadır!" , "warning")
         })
     }
@@ -53,7 +59,8 @@ class PostOption extends Component {
                 <Menu id="simple-menu" anchorEl={this.state.menuAnchorEl} 
                     keepMounted open={Boolean(this.state.menuAnchorEl)} onClose={this.handleClose}
                     transformOrigin={{vertical: 'top',horizontal: 'right'}} variant="selectedMenu"
-                    style={{border: "1px solid #335C67"}}>
+                    style={{border: "1px solid #335C67"}}
+                    PaperProps={{style: {borderRadius: "10px"}}}>
                     <Link className={classes.link} 
                         to={{pathname: "/blog/post-share/" + this.props.currentTabID + "/" + this.props.currentItemID, 
                         token: this.props.token, 
@@ -84,10 +91,17 @@ class PostOption extends Component {
                             </DialogActions>
                         </Dialog>
                 </Menu>
+
             </React.Fragment>
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        token: state.admin.token,
+    };
+};
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -96,4 +110,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(null,mapDispatchToProps)(PostOptionStyles(PostOption));
+export default connect(mapStateToProps,mapDispatchToProps)(PostOptionStyles(PostOption));

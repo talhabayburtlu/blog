@@ -1,7 +1,8 @@
 import React , {Component} from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import {Grid , Button , Typography, Card, CardHeader, CardContent, Snackbar, SnackbarContent, CircularProgress} from "@material-ui/core";
+import {Grid , Button , Typography, Card, CardHeader, CardContent , CircularProgress,  Hidden} from "@material-ui/core";
+import SearchIcon from '@material-ui/icons/Search';
 import Pagination from '@material-ui/lab/Pagination';
 import axios from "axios";
 import MUIRichTextEditor from 'mui-rte'
@@ -10,6 +11,9 @@ import BlogStyles from "./BlogStyles"
 import {BlogItems, IndividualItems}  from "./BlogItems"
 import PostOption from "./PostOption/PostOption"
 import BlogNavbar from "../../components/Blog/BlogNavbar/BlogNavbar";
+import BlogDrawer from "../../components/Blog/Drawer/BlogDrawer";
+import BlogSnackbar from "../../components/Snackbar/BlogSnackbar";
+import SearchTextField from "../../components/SearchTextField/SearchTextField";
 import * as actions from "../../store/actions/index";
 
 class Blog extends Component {
@@ -23,16 +27,20 @@ class Blog extends Component {
         currentPage: 1,
         shouldRenderPosts: false,
         deletePostDialog: false,
+        search: "",
+        searchFieldRef: null
     }
 
     // FUNCTIONS
 
     onItemChangeHandler = async (tabID = this.state.currentTabID,itemID = this.state.currentItemID) => {
+        this.setState({posts: [] , shouldRenderPosts: false})
+
         const currentPage = tabID !== this.state.currentTabID ? 1 : this.state.currentPage;
         let specified = tabID !== 0 ? "/"+ BlogItems[tabID] : "";
         specified += itemID !== 0 ? "/" + IndividualItems[tabID][itemID] : ""
 
-        await axios({method: "get" , url: "/posts" + specified + "/" + (currentPage - 1) })
+        await axios({method: "get" , url: "/posts" + specified + "/" + (currentPage - 1) , params: this.props.search})
         .then((response) => {
             this.setState({
                 currentTabID: tabID,
@@ -40,7 +48,7 @@ class Blog extends Component {
                 posts: response.data.posts , 
                 total: response.data.total, 
                 currentPage, 
-                shouldRenderPosts: true
+                shouldRenderPosts: true,
             })
         })
         .catch((e) => {
@@ -53,56 +61,78 @@ class Blog extends Component {
         await this.onItemChangeHandler()
     }
 
-    componentDidMount() {
-        console.log(this.props)
+    async componentDidMount() {
         if ( this.props.location.state && 
             this.props.location.state.currentTabID && this.props.location.state.currentItemID){ // Handeling 
-                this.onItemChangeHandler(this.props.location.state.currentTabID, this.props.location.state.currentItemID);
+                await this.onItemChangeHandler(this.props.location.state.currentTabID, this.props.location.state.currentItemID);
         } else {
-            this.onItemChangeHandler();
+            await this.onItemChangeHandler();
         }
+        
+        this.setState({searchFieldRef: React.createRef()})
+    } 
+
+    shouldComponentUpdate(nextProps,nextState) {
+
+        if (JSON.stringify(nextState.posts) === JSON.stringify(this.state.posts)) {
+            return false;
+        } else {
+            // console.log(this.state)
+        }
+
+        return true;
     }
 
     // COMPONENTS
-
-    snackbar = (classes) => (
-        <Snackbar 
-            open={this.props.snackbarOpen}
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            autoHideDuration={3000} 
-            onClose={this.props.onSnackbarClose}
-        >
-            <SnackbarContent 
-                className={
-                    this.props.snackbarSeverity === "warning" ? classes.snackBarWarning :
-                    this.props.snackbarSeverity === "success" ? classes.snackBarSuccess :
-                    this.props.snackbarSeverity === "error" ? classes.snackBarFail : null
-                } 
-                message={this.props.snackbarMessage}
-                style={{borderRadius: "10px"}}
-            />
-    </Snackbar>
-    )
-
 
     render() {
         const {classes} = this.props;
 
         return (
-            <React.Fragment>
+            <div>
                 <Grid container className={classes.grid}>
-                    <BlogNavbar currentTabID={this.state.currentTabID}
-                                currentItemID={this.state.currentItemID} 
-                                onItemChangeHandler={this.onItemChangeHandler}
-                    />
+                    <Hidden xsDown >
+                        <BlogNavbar currentTabID={this.state.currentTabID}
+                                    currentItemID={this.state.currentItemID} 
+                                    onItemChangeHandler={this.onItemChangeHandler}
+                        />
+                    </Hidden>
 
+                    <Hidden smUp>
+                        <BlogDrawer currentTabID={this.state.currentTabID}
+                                    currentItemID={this.state.currentItemID} 
+                                    onItemChangeHandler={this.onItemChangeHandler}
+                        />
+                    </Hidden>
+                    
 
-                     {this.state.posts.length > 0 ? <Grid item container xs={12}>
-                        <Grid item xs={12} style={{margin: "30px 0px"}}>
+                     <Grid item container xs={12}>
+                        <Grid item xs={6} style={{margin: "30px 0px"}}>
                             <Typography className={classes.title} variant="h4">
                                 {BlogItems[this.state.currentTabID]}
                                 {this.state.currentTabID !== 0 ? " - " + IndividualItems[this.state.currentTabID][this.state.currentItemID] : null}
                             </Typography>
+                        </Grid>
+
+                        <Grid item xs={6} align="right" style={{margin: "35px 0px"}}>
+                            {/*<SearchTextField  onChange={async (event) => {
+                                    await this.props.onUpdateSearch(event.target.value)
+                                    await this.onItemChangeHandler()
+                                }}
+                            />*/}
+                            {/*<TextField
+                                placeholder="Başlıklarda Ara"
+                                onChange={async (event) => {
+                                    await this.props.onUpdateSearch(event.target.value)
+                                    await this.onItemChangeHandler()
+                                }}
+                                InputProps={{endAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                )}}
+                                autoFocus
+                                > </TextField>*/}
                         </Grid>
 
                         {this.state.shouldRenderPosts ? this.state.posts.map((post,index) => 
@@ -116,7 +146,6 @@ class Blog extends Component {
                                         {this.props.token !== null ? <Grid item xs={3} align="right">
                                            <PostOption 
                                             post={post} 
-                                            token={this.props.token} 
                                             currentTabID={BlogItems.indexOf(post.breadcrumbs[0])}
                                             currentItemID={IndividualItems[BlogItems.indexOf(post.breadcrumbs[0])].indexOf(post.breadcrumbs[1])} 
                                             onDeleteHandler={this.onItemChangeHandler}/>
@@ -145,17 +174,16 @@ class Blog extends Component {
                                     </CardContent>
                                 </Card>
                             </Grid>
-                        ) : null }
-                    </Grid> : <Grid container justify="center"><CircularProgress size="160px" style={{margin: "50px"}}/></Grid>} 
+                        ) : <Grid container justify="center"><CircularProgress size="160px" style={{margin: "50px"}}/></Grid> }
+                    </Grid> 
                     
                     <Grid container justify="center">
                         <Pagination count={Math.ceil(this.state.total / 10)} page={this.state.currentPage} size="large" color="primary" onChange={this.onCurrentPageChangeHandler} />
                     </Grid>
 
-                    
-                </Grid>
-                {this.snackbar(classes)}               
-            </React.Fragment>
+                    <BlogSnackbar />
+                </Grid>           
+            </div>
         )
     }
 }
@@ -163,16 +191,13 @@ class Blog extends Component {
 const mapStateToProps = state => {
     return {
         token: state.admin.token,
-        snackbarOpen : state.snackbar.open,
-        snackbarMessage : state.snackbar.message,
-        snackbarSeverity : state.snackbar.severity
+        search: state.post.search
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onSnackbarOpen : (message,severity) => dispatch((actions.openSnackbar(message,severity))),
-        onSnackbarClose : () => dispatch(actions.closeSnackbar())
+        onUpdateSearch : (value) => dispatch(actions.updateSearch(value))
     }
 }
 

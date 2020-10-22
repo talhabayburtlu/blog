@@ -17,13 +17,13 @@ const CV = () => {
     
     return (
         <React.Fragment>
-            <Grid container justify="center" style={{margin:"50px 0px", padding:"0px 15.5%"}}>
+            <Grid container className={CvClasses.container} justify="center">
                 <Grid item xs={12} align="center" >
                     <AppBar className={CvClasses.appbar} position="relative" >
                         <Grid container item justify="center">
                             <ButtonGroup >
-                                <Button className={CvClasses.button} size="large" onClick={() => onDocumentChange("turkish")}>Türkçe</Button>
-                                <Button className={CvClasses.button} size="large" onClick={() => onDocumentChange("english")}>English</Button>
+                                <Button className={CvClasses.button} onClick={() => onDocumentChange("turkish")}>Türkçe</Button>
+                                <Button className={CvClasses.button} onClick={() => onDocumentChange("english")}>English</Button>
                             </ButtonGroup>
                         </Grid>
                     </AppBar> 

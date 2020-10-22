@@ -1,47 +1,52 @@
 import { makeStyles } from "@material-ui/core";
 
-const HesaplarımStyles = makeStyles({
-    generalContainer: {
-        marginTop: "100px",
-        padding: "0px 10%"
+const HesaplarımStyles = makeStyles(theme => ({
+    container: {
+        
+        [theme.breakpoints.up("xs")] : {marginTop: "10px",padding: "0px 10px", },
+        [theme.breakpoints.up("sm")] : {padding: "0px 40px", },
+        [theme.breakpoints.up("md")] : {marginTop: "25px", padding: "0px 60px", },
+        [theme.breakpoints.up("lg")] : {padding: "0px 85px", },
     },
-    card: {
-        margin: "25px 10px",
-        width: "100%",
+    innerContainer: {
+        padding: "15px 0px",
+        [theme.breakpoints.up("xs")] : {height: "175px"},
+        [theme.breakpoints.up("sm")] : {height: "250px"},
+        [theme.breakpoints.up("md")] : {height: "275px"},
+        [theme.breakpoints.up("lg")] : {height: "300px"},
+    },
+    line: {
+        margin: "auto 0px",
+        height: "2px",
         backgroundColor: "#7E1014",
-        borderRadius: "25px",
     },
     header: {
-        backgroundColor: "#7E1014",
-        padding: "25px",
-        height: "35%"
-    },
-    content: {
-        backgroundColor: "#335C67",
-        padding: "10px 25px",
-        borderRadius: "25px"
+        fontFamily: "adobe-garamond-pro",
+        [theme.breakpoints.up("xs")] : {fontSize: "14px"},
+        [theme.breakpoints.up("sm")] : {fontSize: "16px"},
+        [theme.breakpoints.up("md")] : {fontSize: "24px"},
+        [theme.breakpoints.up("lg")] : {fontSize: "32px"},
     },
     iconButton: {
         backgroundColor: "#FFF9D6",
-        width: "80%",
+        // width: "75%",
         borderRadius: "15px",
         "&:hover": {
             backgroundColor: "#FFF3AD",
         }
     },
-    mediaName: {
-        fontFamily: "adobe-garamond-pro",
-    },
     icon: {
         marginRight: "5%",
+        [theme.breakpoints.up("xs")] : {width: "24px",height: "24px"},
+        [theme.breakpoints.up("sm")] : {width: "36px",height: "36px"},
+        [theme.breakpoints.up("md")] : {width: "48px",height: "48px"},
     },
-    title: {
-        padding: "0px 25px",
+    mediaName: {
         fontFamily: "adobe-garamond-pro",
-        backgroundColor: "#FFF9D6",
-        border: "2px solid #7E1014",
-        borderRadius: "10px",
-    }
-});
+        [theme.breakpoints.up("xs")] : {fontSize: "14px"},
+        [theme.breakpoints.up("sm")] : {fontSize: "24px"},
+        [theme.breakpoints.up("md")] : {fontSize: "32px"},
+    },
+}));
 
 export default HesaplarımStyles;

@@ -6,3 +6,6 @@ export {
     closeSnackbar,
     openSnackbar
 } from "./snackbar"
+export {
+    updateSearch
+} from "./post"

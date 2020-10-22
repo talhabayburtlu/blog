@@ -11,12 +11,14 @@ import theme from "./theme/theme"
 import { ThemeProvider } from '@material-ui/core';
 import adminReducer from "./store/reducers/admin";
 import snackbarReducer from "./store/reducers/snackbar";
+import postReducer from "./store/reducers/post";
 
 const composeEnhancers = process.env.NODE_ENV === "development" ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose ;
 
 const rootReducer = combineReducers({
   admin: adminReducer,
-  snackbar: snackbarReducer
+  snackbar: snackbarReducer,
+  post: postReducer,
 })
 
 const store = createStore(rootReducer, composeEnhancers(
@@ -27,9 +29,7 @@ ReactDOM.render(
   <Provider store={store}>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
-          <React.StrictMode>
             <App />
-          </React.StrictMode> 
         </ThemeProvider>
       </BrowserRouter>   
   </Provider>

@@ -2,8 +2,10 @@ import {withStyles} from "@material-ui/core/styles"
 
 const BlogStyles = withStyles((theme) => ({
     grid: {
-        margin: "100px 0px",
-        padding: "0px 85px",
+        [theme.breakpoints.up("xs")] : {margin: "20px 0px",padding: "0px 10px", },
+        [theme.breakpoints.up("sm")] : {margin: "40px 0px",padding: "0px 40px", },
+        [theme.breakpoints.up("md")] : {margin: "80px 0px", padding: "0px 60px", },
+        [theme.breakpoints.up("lg")] : {margin: "100px 0px",padding: "0px 85px", },
     },
     appbar: {
         color: "#7E1014",
@@ -13,12 +15,15 @@ const BlogStyles = withStyles((theme) => ({
         fontWeight: "bold",
     },
     button: {
-        borderRadius: "0px",
+        borderRadius: "10px",
         margin: "0px 10px",
         height: "100%",
         fontFamily: "din-condensed-web",
         backgroundColor: "#7E1014",
         color: "#FFF9D6",
+        "&:hover": {
+            boxShadow: "3px 3px 3px 0px rgba(0,0,0,0.75);",
+        }
     },
     link: {
         textDecoration: "none"
@@ -26,7 +31,7 @@ const BlogStyles = withStyles((theme) => ({
     card: {
         margin: "25px 0px",
         border: "1px solid #335C67",
-        borderRadius: "25px"
+        borderRadius: "15px"
     },
     cardTitle: {
         fontFamily: "adobe-garamond-pro",
@@ -82,6 +87,6 @@ const BlogStyles = withStyles((theme) => ({
     snackBarWarning: {
         backgroundColor: "#E09F3E"
     }
-}));
+}), {withTheme: true});
 
 export default BlogStyles;
