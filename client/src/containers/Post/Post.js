@@ -1,7 +1,7 @@
 import React , {Component} from "react";
 import {Redirect, withRouter} from "react-router-dom"
 import { connect } from "react-redux";
-import { Grid, Typography, Card, CardHeader , CardContent , CircularProgress, Hidden} from "@material-ui/core";
+import { Grid, Typography, Card, CardHeader , CardContent , CircularProgress, Hidden,Grow, Fade} from "@material-ui/core";
 import axios from "axios";
 import MUIRichTextEditor from 'mui-rte'
 
@@ -43,53 +43,56 @@ class Post extends Component {
         <React.Fragment>
             {this.state.post === null ? null :
             this.state.error ? <Redirect to="/blog" /> :
-            <Grid container className={classes.grid}>
-                <Hidden xsDown >
-                    <BlogNavbar
-                        currentTabID={0} 
-                        currentItemID={0}
-                        onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
-                            {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }})}
-                    />
-                </Hidden>
+            <Fade in={true} timeout={1000}>
+                <Grid container className={classes.grid}>
+                    <Hidden xsDown >
+                        <BlogNavbar
+                            currentTabID={0} 
+                            currentItemID={0}
+                            onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
+                                {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }})}
+                        />
+                    </Hidden>
 
-                <Hidden smUp>
-                    <BlogDrawer currentTabID={0}
-                                currentItemID={0} 
-                                onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
-                                    {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }}
-                                )}   
-                    />
-                </Hidden>
-                
-
-                <Grid item xs={12}>
-                    <Card className={classes.card}>
-                        <Grid container>
-                            <Grid item xs={9}>
-                                <CardHeader title={<Typography className={classes.cardTitle} variant="h5">{this.state.post.blocks[0].text}</Typography>}
-                                        subheader={<Typography className={classes.cardSubtitle} variant="body2">{((new Date(this.state.post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
-                            </Grid>
-                            {this.props.token !== null ? <Grid item xs={3} align="right">
-                                <PostOption post={this.state.post} token={this.props.token} currentTabID={this.props.location.currentTabID} onDeleteHandler={() => this.props.history.push("/blog")}/>
-                            </Grid> : null}
+                    <Hidden smUp>
+                        <BlogDrawer currentTabID={0}
+                                    currentItemID={0} 
+                                    onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
+                                        {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }}
+                                    )}   
+                        />
+                    </Hidden>
+                    
+                    <Grow in={true} timeout={1000}>
+                        <Grid item xs={12}>
+                            <Card className={classes.card}>
+                                <Grid container>
+                                    <Grid item xs={9}>
+                                        <CardHeader title={<Typography className={classes.cardTitle} variant="h5">{this.state.post.blocks[0].text}</Typography>}
+                                                subheader={<Typography className={classes.cardSubtitle} variant="body2">{((new Date(this.state.post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
+                                    </Grid>
+                                    {this.props.token !== null ? <Grid item xs={3} align="right">
+                                        <PostOption post={this.state.post} token={this.props.token} currentTabID={this.props.location.currentTabID} onDeleteHandler={() => this.props.history.push("/blog")}/>
+                                    </Grid> : null}
+                                </Grid>
+                                    
+                                    
+                                    <CardContent className={classes.cardContent}>
+                                        <MUIRichTextEditor toolbar={false} 
+                                            defaultValue={JSON.stringify({
+                                                blocks: this.state.post.blocks.slice(1) , 
+                                                entityMap: this.state.post.entityMap ? this.state.post.entityMap : {}
+                                            })} 
+                                            decorators={Decorators}
+                                            readOnly
+                                        />
+            
+                                    </CardContent>
+                                </Card>
                         </Grid>
-                            
-                            
-                            <CardContent className={classes.cardContent}>
-                                <MUIRichTextEditor toolbar={false} 
-                                    defaultValue={JSON.stringify({
-                                        blocks: this.state.post.blocks.slice(1) , 
-                                        entityMap: this.state.post.entityMap ? this.state.post.entityMap : {}
-                                    })} 
-                                    decorators={Decorators}
-                                    readOnly
-                                />
-    
-                            </CardContent>
-                        </Card>
+                    </Grow>
                 </Grid>
-            </Grid> }
+            </Fade> }
         </React.Fragment> 
         )
     }

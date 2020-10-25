@@ -1,7 +1,7 @@
 import React , {Component} from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import {Grid , Button , Typography, Card, CardHeader, CardContent , CircularProgress,  Hidden} from "@material-ui/core";
+import {Grid , Button , Typography, Card, CardHeader, CardContent , CircularProgress,  Hidden, Fade, Grow} from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 import Pagination from '@material-ui/lab/Pagination';
 import axios from "axios";
@@ -90,99 +90,103 @@ class Blog extends Component {
 
         return (
             <div>
-                <Grid container className={classes.grid}>
-                    <Hidden xsDown >
-                        <BlogNavbar currentTabID={this.state.currentTabID}
-                                    currentItemID={this.state.currentItemID} 
-                                    onItemChangeHandler={this.onItemChangeHandler}
-                        />
-                    </Hidden>
+                <Fade in={true} timeout={1000}>
+                    <Grid container className={classes.grid}>
+                        <Hidden xsDown >
+                            <BlogNavbar currentTabID={this.state.currentTabID}
+                                        currentItemID={this.state.currentItemID} 
+                                        onItemChangeHandler={this.onItemChangeHandler}
+                            />
+                        </Hidden>
 
-                    <Hidden smUp>
-                        <BlogDrawer currentTabID={this.state.currentTabID}
-                                    currentItemID={this.state.currentItemID} 
-                                    onItemChangeHandler={this.onItemChangeHandler}
-                        />
-                    </Hidden>
-                    
+                        <Hidden smUp>
+                            <BlogDrawer currentTabID={this.state.currentTabID}
+                                        currentItemID={this.state.currentItemID} 
+                                        onItemChangeHandler={this.onItemChangeHandler}
+                            />
+                        </Hidden>
+                        
 
-                     <Grid item container xs={12}>
-                        <Grid item xs={6} style={{margin: "30px 0px"}}>
-                            <Typography className={classes.title} variant="h4">
-                                {BlogItems[this.state.currentTabID]}
-                                {this.state.currentTabID !== 0 ? " - " + IndividualItems[this.state.currentTabID][this.state.currentItemID] : null}
-                            </Typography>
-                        </Grid>
-
-                        <Grid item xs={6} align="right" style={{margin: "35px 0px"}}>
-                            {/*<SearchTextField  onChange={async (event) => {
-                                    await this.props.onUpdateSearch(event.target.value)
-                                    await this.onItemChangeHandler()
-                                }}
-                            />*/}
-                            {/*<TextField
-                                placeholder="Başlıklarda Ara"
-                                onChange={async (event) => {
-                                    await this.props.onUpdateSearch(event.target.value)
-                                    await this.onItemChangeHandler()
-                                }}
-                                InputProps={{endAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                )}}
-                                autoFocus
-                                > </TextField>*/}
-                        </Grid>
-
-                        {this.state.shouldRenderPosts ? this.state.posts.map((post,index) => 
-                            <Grid item xs={12} key={index}>
-                                <Card className={classes.card}>
-                                    <Grid container >
-                                        <Grid item xs={9}>
-                                            <CardHeader title={<Typography className={classes.cardTitle} variant="h5">{post.blocks[0].text}</Typography>}
-                                                        subheader={<Typography className={classes.cardSubtitle} variant="body2">{((new Date(post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
-                                        </Grid>
-                                        {this.props.token !== null ? <Grid item xs={3} align="right">
-                                           <PostOption 
-                                            post={post} 
-                                            currentTabID={BlogItems.indexOf(post.breadcrumbs[0])}
-                                            currentItemID={IndividualItems[BlogItems.indexOf(post.breadcrumbs[0])].indexOf(post.breadcrumbs[1])} 
-                                            onDeleteHandler={this.onItemChangeHandler}/>
-                                        </Grid> : null}
-                                    </Grid>
-
-                                    <CardContent>
-
-                                        <MUIRichTextEditor toolbar={false} defaultValue={JSON.stringify({
-                                            blocks: [post.blocks[1]], 
-                                            entityMap: post.entityMap ? post.entityMap : {}
-                                        })} readOnly/>
-
-                                        
-                                        <Grid container alignItems="center">
-                                            <Grid item xs={3}>&hellip;</Grid> 
-                                            <Grid item xs={9} align="right">
-                                                <Link className={classes.link} to={{pathname: "/blog/post/" + post._id, currentTabID: this.state.currentTabID, onItemChangeHandler: this.onItemChangeHandler}}>
-                                                    <Button className={[classes.button , classes.cardButton].join(" ")} 
-                                                            variant="contained" 
-                                                            size="large" >DEVAMINI OKU</Button>
-                                                </Link>
-                                                
-                                            </Grid>
-                                        </Grid>
-                                    </CardContent>
-                                </Card>
+                        <Grid item container xs={12}>
+                            <Grid item xs={12} style={{margin: "30px 0px"}}>
+                                <Typography className={classes.title} variant="h4">
+                                    {BlogItems[this.state.currentTabID]}
+                                    {this.state.currentTabID !== 0 ? " - " + IndividualItems[this.state.currentTabID][this.state.currentItemID] : null}
+                                </Typography>
                             </Grid>
-                        ) : <Grid container justify="center"><CircularProgress size="160px" style={{margin: "50px"}}/></Grid> }
-                    </Grid> 
-                    
-                    <Grid container justify="center">
-                        <Pagination count={Math.ceil(this.state.total / 10)} page={this.state.currentPage} size="large" color="primary" onChange={this.onCurrentPageChangeHandler} />
-                    </Grid>
 
-                    <BlogSnackbar />
-                </Grid>           
+                            <Grid item xs={0} align="right" style={{margin: "35px 0px"}}>
+                                {/*<SearchTextField  onChange={async (event) => {
+                                        await this.props.onUpdateSearch(event.target.value)
+                                        await this.onItemChangeHandler()
+                                    }}
+                                />*/}
+                                {/*<TextField
+                                    placeholder="Başlıklarda Ara"
+                                    onChange={async (event) => {
+                                        await this.props.onUpdateSearch(event.target.value)
+                                        await this.onItemChangeHandler()
+                                    }}
+                                    InputProps={{endAdornment: (
+                                        <InputAdornment position="start">
+                                            <SearchIcon />
+                                        </InputAdornment>
+                                    )}}
+                                    autoFocus
+                                    > </TextField>*/}
+                            </Grid>
+
+                            {this.state.shouldRenderPosts ? this.state.posts.map((post,index) =>
+                            <Grow in={true} timeout={1000}>
+                                <Grid item xs={12} key={index}>
+                                    <Card className={classes.card}>
+                                        <Grid container >
+                                            <Grid item xs={9}>
+                                                <CardHeader title={<Typography className={classes.cardTitle} variant="h5">{post.blocks[0].text}</Typography>}
+                                                            subheader={<Typography className={classes.cardSubtitle} variant="body2">{((new Date(post.createdAt)).toLocaleString())}</Typography>}></CardHeader>
+                                            </Grid>
+                                            {this.props.token !== null ? <Grid item xs={3} align="right">
+                                            <PostOption 
+                                                post={post} 
+                                                currentTabID={BlogItems.indexOf(post.breadcrumbs[0])}
+                                                currentItemID={IndividualItems[BlogItems.indexOf(post.breadcrumbs[0])].indexOf(post.breadcrumbs[1])} 
+                                                onDeleteHandler={this.onItemChangeHandler}/>
+                                            </Grid> : null}
+                                        </Grid>
+
+                                        <CardContent>
+
+                                            <MUIRichTextEditor toolbar={false} defaultValue={JSON.stringify({
+                                                blocks: [post.blocks[1]], 
+                                                entityMap: post.entityMap ? post.entityMap : {}
+                                            })} readOnly/>
+
+                                            
+                                            <Grid container alignItems="center">
+                                                <Grid item xs={3}>&hellip;</Grid> 
+                                                <Grid item xs={9} align="right">
+                                                    <Link className={classes.link} to={{pathname: "/blog/post/" + post._id, currentTabID: this.state.currentTabID, onItemChangeHandler: this.onItemChangeHandler}}>
+                                                        <Button className={[classes.button , classes.cardButton].join(" ")} 
+                                                                variant="contained" 
+                                                                size="large" >DEVAMINI OKU</Button>
+                                                    </Link>
+                                                    
+                                                </Grid>
+                                            </Grid>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                                </Grow>
+                            ) : <Grid container justify="center"><CircularProgress size="160px" style={{margin: "50px"}}/></Grid> }
+                        </Grid> 
+                        
+                        <Grid container justify="center">
+                            <Pagination count={Math.ceil(this.state.total / 10)} page={this.state.currentPage} size="large" color="primary" onChange={this.onCurrentPageChangeHandler} />
+                        </Grid>
+
+                        <BlogSnackbar />
+                    </Grid>
+                </Fade>           
             </div>
         )
     }

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom"
 import { connect } from "react-redux";
-import { Grid,  Breadcrumbs, Link, Typography, Hidden } from "@material-ui/core";
+import { Grid,  Breadcrumbs, Link, Typography, Hidden, Fade } from "@material-ui/core";
 import {MuiThemeProvider } from '@material-ui/core/styles'
 import MUIRichTextEditor from 'mui-rte'
 import axios from "axios";
@@ -88,58 +88,59 @@ class PostShare extends Component {
     
         return (
             <React.Fragment>
-                <Grid container className={classes.grid}>
-                    <Grid container item style={{marginBottom: "25px"}}>
-                        <Hidden xsDown >
-                            <BlogNavbar
-                                currentTabID={0} 
-                                currentItemID={0} 
-                                onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
-                                    {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }}
-                                )}                 
-                            />
-                        </Hidden>
+                <Fade in={true} timeout={1000}>
+                    <Grid container className={classes.grid}>
+                        <Grid container item style={{marginBottom: "25px"}}>
+                            <Hidden xsDown >
+                                <BlogNavbar
+                                    currentTabID={0} 
+                                    currentItemID={0} 
+                                    onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
+                                        {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }}
+                                    )}                 
+                                />
+                            </Hidden>
 
-                        <Hidden smUp>
-                            <BlogDrawer currentTabID={0}
-                                        currentItemID={0} 
-                                        onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
-                                            {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }}
-                                        )}   
-                            />
-                        </Hidden>
+                            <Hidden smUp>
+                                <BlogDrawer currentTabID={0}
+                                            currentItemID={0} 
+                                            onItemChangeHandler={(selectedTabID,selectedItemID) => this.props.history.push(
+                                                {pathname: "/blog" , state: {currentTabID: selectedTabID, currentItemID: selectedItemID }}
+                                            )}   
+                                />
+                            </Hidden>
 
+                        </Grid>
+                        <Grid container item className={classes.gridContainerItem}>
+                            <Grid item xs={8} style={{marginTop: "25px"}}>
+                                <Breadcrumbs separator="→">
+                                    <Link className={classes.breadCrumb} color="primary" href="/blog">Blog</Link>
+                                    <Typography className={classes.breadCrumb} color="primary">{
+                                        BlogItems[this.props.match.params.tabID]
+                                    }</Typography>
+                                    <Typography className={classes.breadCrumb} color="primary">{
+                                        IndividualItems[this.props.match.params.tabID][this.props.match.params.itemID]
+                                    } </Typography>
+                                </Breadcrumbs>
+                            </Grid>
+                            <Grid item xs={4} align="right" style={{marginTop: "25px"}}>
+                                <Typography className={classes.breadCrumb} color="primary">{defaultValue ? "Paylaşım Düzenleme" : "Yeni Paylaşım" }</Typography>
+                            </Grid>
+                            <Grid item xs={12} style={{ borderRadius: "5px" , minHeight: "475px"}}>
+                                <MuiThemeProvider theme={theme}>
+                                    <MUIRichTextEditor
+                                        defaultValue={defaultValue}
+                                        label="Buraya paylaşımı yazınız." 
+                                        toolbar inlineToolbar 
+                                        onSave={(data) => this.onSaveHandler(data)} 
+                                        decorators={Decorators} />
+                                </MuiThemeProvider>
+
+                            
+                            </Grid>
+                        </Grid>
                     </Grid>
-                    <Grid container item className={classes.gridContainerItem}>
-                        <Grid item xs={8} style={{marginTop: "25px"}}>
-                            <Breadcrumbs separator="→">
-                                <Link className={classes.breadCrumb} color="primary" href="/blog">Blog</Link>
-                                <Typography className={classes.breadCrumb} color="primary">{
-                                    BlogItems[this.props.match.params.tabID]
-                                }</Typography>
-                                <Typography className={classes.breadCrumb} color="primary">{
-                                    IndividualItems[this.props.match.params.tabID][this.props.match.params.itemID]
-                                } </Typography>
-                            </Breadcrumbs>
-                        </Grid>
-                        <Grid item xs={4} align="right" style={{marginTop: "25px"}}>
-                            <Typography className={classes.breadCrumb} color="primary">{defaultValue ? "Paylaşım Düzenleme" : "Yeni Paylaşım" }</Typography>
-                        </Grid>
-                        <Grid item xs={12} style={{ borderRadius: "5px" , minHeight: "475px"}}>
-                            <MuiThemeProvider theme={theme}>
-                                <MUIRichTextEditor
-                                    defaultValue={defaultValue}
-                                    label="Buraya paylaşımı yazınız." 
-                                    toolbar inlineToolbar 
-                                    onSave={(data) => this.onSaveHandler(data)} 
-                                    decorators={Decorators} />
-                            </MuiThemeProvider>
-
-                           
-                        </Grid>
-                    </Grid>
-                </Grid>
-
+                </Fade>
             </React.Fragment>
         )    
     }
