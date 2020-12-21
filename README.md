@@ -1,5 +1,5 @@
 # Webpage & Blog (MERN)
-Personal webpage & blog built with MERN (MongoDB ExpressJS ReactJS NodeJS) stack application. Currently under construction.
+Personal webpage & blog built with MERN (MongoDB ExpressJS ReactJS NodeJS) stack application.
 [Webpage Link](https://talhabayburtlu.herokuapp.com/blog)
 
 ## How It Works (Visited Side)
